@@ -26,8 +26,10 @@ class Point{
         const float* getCoord() const;
         void setCoord( float x, float y);
 
+        Point& operator++(); // prefixat
+        Point operator++(int); //postfixat
 
-        //++, ==, <
-
+        bool operator==(const Point& other) const;
+        bool operator<(const Point& other) const;
         
 };

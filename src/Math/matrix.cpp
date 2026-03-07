@@ -237,3 +237,27 @@ Matrix Matrix::genScaleMatrix(float scale){
         result[i][i] = scale;
     return result;
 }
+
+Matrix& Matrix::operator++(){
+    for(unsigned int i = 0; i<rows;++i){
+        for(unsigned int j = 0;j<cols;++j)
+            data[i][j]++;
+    }
+    return *this;
+}
+Matrix Matrix::operator++(int){
+    Matrix ret = *this;
+    for(unsigned int i = 0; i<rows;++i){
+        for(unsigned int j = 0;j<cols;++j)
+            data[i][j]++;
+    }
+    return ret;
+}
+
+bool Matrix::operator==(const Matrix& other) const{
+    return rows == other.rows && cols == other.cols;
+}
+bool Matrix::operator<(const Matrix& other) const{
+    return rows < other.rows || cols == other.cols;
+
+}

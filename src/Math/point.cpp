@@ -88,3 +88,26 @@ void Point::setCoord(float x, float y){
         coord[1] = y;
     }
 }
+
+Point& Point::operator++(){
+    coord[0]++;
+    coord[1]++;
+    return *this;
+}
+
+Point Point::operator++(int){
+    Point ret = *this;
+    coord[0]++;
+    coord[1]++;
+    return ret;
+}
+
+bool Point::operator==(const Point& other) const{
+    return coord[0] == other.coord[0] && coord[1] == other.coord[1];
+}
+
+bool Point::operator<(const Point& other) const{
+    if(coord[0]!=other.coord[0])
+        return coord[0] < other.coord[0];
+    else return coord[1] < other.coord[1];
+}

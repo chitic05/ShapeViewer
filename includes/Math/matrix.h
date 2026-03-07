@@ -30,5 +30,10 @@ class Matrix{
         static Matrix genTranslateMatrix(float x,float y);
         static Matrix genRotateMatrix(float grade);
         static Matrix genScaleMatrix(float scale); // sa-l implementz
-        //++, ==, <
+
+        Matrix& operator++(); // prefixat
+        Matrix operator++(int); //postfixat
+
+        bool operator==(const Matrix& other) const;
+        bool operator<(const Matrix& other) const;
 };

@@ -1,17 +1,12 @@
 #include <iostream>
 #include "Page/pageManager.h"
 #include "Shape/shape.h"
+#include "Shape/shapeManager.h"
+#include "Math/matrix.h"
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
 
 int main(){
-    Point* vertices = new Point[3]{
-        Point(1,0),
-        Point(0,1),
-        Point(-1,0)
-    };
-    Shape s(3, vertices);
-
-    Matrix m = Matrix::genRotateMatrix(180);
-    s=m*s;
-
-    std::cout << s;
+    
+    return 0;
 }
