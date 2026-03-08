@@ -1,21 +1,21 @@
 #include "MainPage/mainPage.h"
 #include "Page/pageManager.h"
 #include "terminal.hpp"
+
 MainPage::MainPage(){
     this->pageKey="mainPage";
-    this->pageName="Main Page";
-    this->text="\tMain page\n"
-                 "1. Real numbers calculus\n"
-                 "2. Matrix calculus\n"
-                 "3. 2D Vector calculus\n"
-                 "4. 3D Vector calculus\n"
-                 "5. Complex numbers calculus\n"
-                 "--Write the number that represents your pick and press enter--\n";
+    this->pageName="Pagina Principala";
+    this->text="\tMeniu Principal\n"
+                 "1. Adauga forma\n"
+                 "2. Sterge forma\n"
+                 "3. Modifica forma\n"
+                 "4. Afiseaza forme\n"
+                 "--Scrie numarul optiunii si apasa enter--\n";
 }
 
 void MainPage::initNeighbourPages(){
     this->previous = nullptr;
-    this->next = {PageManager::getPage("realNumPage"), PageManager::getPage("matrixPage"), PageManager::getPage("vector2DPage"), PageManager::getPage("vector3DPage"), PageManager::getPage("ComplexPage")};
+    this->next = {PageManager::getPage("addPage"), PageManager::getPage("deletePage"), PageManager::getPage("modifyPage"), PageManager::getPage("printPage")};
 }
 
 void MainPage::Load(){

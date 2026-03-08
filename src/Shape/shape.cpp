@@ -2,8 +2,11 @@
 #include <cstring>
 #include <stdexcept>
 #include <iostream>
-#include <SDL3/SDL.h>
+#include <string>
+#include <limits>
+
 unsigned int Shape::newestId = 0;
+
 Shape::Shape()
     :id(++newestId), color(Color::RED), numVertices(0){
         vertices = nullptr;
@@ -17,15 +20,18 @@ Shape::Shape(unsigned int num,Point* vertices, Color color, const char* name)
         for(unsigned int i=0; i<num;++i){
             this->vertices[i] = vertices[i];
         }
+        
         this->name = new char[strlen(name) + 1];
         strcpy(this->name, name);
 }
+
 Shape::Shape(unsigned int num,Point* vertices)
     :numVertices(num), color(Color::RED), id(++newestId){
         this->vertices = new Point[num];
         for(unsigned int i=0; i<num;++i){
             this->vertices[i] = vertices[i];
         }
+        
         this->name = new char[9];
         strcpy(this->name, "Polygone");
 }
@@ -36,17 +42,18 @@ Shape::Shape(unsigned int num,Point* vertices, const char* name)
         for(unsigned int i=0; i<num;++i){
             this->vertices[i] = vertices[i];
         }
+        
         this->name = new char[strlen(name) + 1];
         strcpy(this->name, name);
 }
 
-// Constructors with center position
 Shape::Shape(unsigned int num, Point* vertices, Color color, const char* name, float centerX, float centerY)
     :numVertices(num), color(color), id(++newestId){
         this->vertices = new Point[num];
         for(unsigned int i=0; i<num;++i){
             this->vertices[i] = vertices[i] + Point(centerX, centerY);
         }
+        
         this->name = new char[strlen(name) + 1];
         strcpy(this->name, name);
 }
@@ -57,6 +64,7 @@ Shape::Shape(unsigned int num, Point* vertices, float centerX, float centerY)
         for(unsigned int i=0; i<num;++i){
             this->vertices[i] = vertices[i] + Point(centerX, centerY);
         }
+        
         this->name = new char[9];
         strcpy(this->name, "Polygone");
 }
@@ -67,6 +75,7 @@ Shape::Shape(unsigned int num, Point* vertices, const char* name, float centerX,
         for(unsigned int i=0; i<num;++i){
             this->vertices[i] = vertices[i] + Point(centerX, centerY);
         }
+        
         this->name = new char[strlen(name) + 1];
         strcpy(this->name, name);
 }
@@ -76,9 +85,10 @@ Shape::~Shape(){
     delete[] name;
 }
 
-Shape::Shape(const Shape& other):id(++newestId){
+Shape::Shape(const Shape& other):id(other.id){
     if(other.numVertices>0 && other.vertices){
         numVertices = other.numVertices;
+        
         vertices = new Point[numVertices];
         for(unsigned int i = 0; i<numVertices;++i)
             vertices[i] = other.vertices[i];
@@ -96,13 +106,12 @@ Shape& Shape::operator=(const Shape& other){
     if(this == &other)
         return *this;
     
-    // Delete old memory
     delete[] vertices;
     delete[] name;
     
-    // Copy vertices
     if(other.numVertices>0 && other.vertices){
         numVertices = other.numVertices;
+        
         vertices = new Point[numVertices];
         for(unsigned int i = 0; i<numVertices;++i)
             vertices[i] = other.vertices[i];
@@ -111,7 +120,9 @@ Shape& Shape::operator=(const Shape& other){
         vertices=nullptr;
     }
     
+    id = other.id;
     color = other.color;
+    
     name = new char[strlen(other.name) + 1];
     strcpy(name, other.name);
     
@@ -122,6 +133,7 @@ Point& Shape::operator[](unsigned int index){
     if(vertices && index<numVertices){
         return vertices[index];
     }
+    
     throw std::out_of_range("Shape index out of bounds");
 
 }
@@ -130,9 +142,11 @@ const Point& Shape::operator[](unsigned int index) const{
     if(vertices && index<numVertices){
         return vertices[index];
     }
+    
     throw std::out_of_range("Shape index out of bounds");
 
 }
+
 Shape Shape::operator+(const float val) const {
     Shape copie = *this;
     
@@ -141,9 +155,11 @@ Shape Shape::operator+(const float val) const {
     }
     
     return copie; 
-}// sa o fac comutativa
+}
+
 Shape operator*(const Matrix& matrix, const Shape& shape){
     Shape result = shape;
+    
     for(unsigned int i=0; i<result.numVertices;++i){
         result[i] = matrix*result[i];
     }
@@ -152,6 +168,7 @@ Shape operator*(const Matrix& matrix, const Shape& shape){
 
 std::ostream& operator<<(std::ostream& out,const Shape& shape){
     out << shape.id << " | " << shape.name << " | ";
+    
     switch(shape.color){
         case Color::RED:
             out << "ROSU";
@@ -163,45 +180,88 @@ std::ostream& operator<<(std::ostream& out,const Shape& shape){
             out << "VERDE";
             break;
     }
+    
     out << " | " << shape.numVertices << " | ";
     for(unsigned int i=0; i<shape.numVertices;++i){
+        
         if(i > 0) out << ", ";
         out << "(" << shape[i].getCoord()[0] << "," << shape[i].getCoord()[1] << ")";
     }
     return out;
 }
+
 std::istream& operator>>(std::istream& in, Shape& shape){
+    std::string line;
+    
     std::cout << "Introduceti numele formei: ";
-    char tempName[100];
-    in >> tempName;
+    std::getline(in, line);
+    
+    if(line.empty()) line = "Polygone";
+    
     delete[] shape.name;
-    shape.name = new char[strlen(tempName) + 1];
-    strcpy(shape.name, tempName);
+    shape.name = new char[line.length() + 1];
+    strcpy(shape.name, line.c_str());
     
     std::cout << "Introduceti culoarea (0-ROSU, 1-ALBASTRU, 2-VERDE): ";
-    int colorChoice;
-    in >> colorChoice;
+    std::getline(in, line);
+    
+    int colorChoice = 0;
+    try {
+        colorChoice = std::stoi(line);
+        
+        if(colorChoice < 0 || colorChoice > 2) {
+            colorChoice = 0;
+            std::cout << "Culoare invalida, folosesc ROSU.\n";
+        }
+    } catch(...) {
+        colorChoice = 0;
+        std::cout << "Culoare invalida, folosesc ROSU.\n";
+    }
     shape.color = (Color)colorChoice;
     
     std::cout << "Introduceti numarul de varfuri: ";
-    in >> shape.numVertices;
+    std::getline(in, line);
+    
+    try {
+        shape.numVertices = std::stoi(line);
+        
+        if(shape.numVertices == 0 || shape.numVertices > 1000) {
+            shape.numVertices = 3;
+            std::cout << "Numar invalid, folosesc 3 varfuri.\n";
+        }
+    } catch(...) {
+        shape.numVertices = 3;
+        std::cout << "Numar invalid, folosesc 3 varfuri.\n";
+    }
+    
     if(shape.vertices)
         delete[] shape.vertices;
     shape.vertices = new Point[shape.numVertices];
     
     for(unsigned int i=0; i<shape.numVertices; ++i){
-        std::cout << "Introduceti coordonatele varfului " << (i+1) << ":\n";
-        in >> shape.vertices[i];
+        std::cout << "Introduceti coordonatele varfului " << (i+1) << " (x y): ";
+        
+        std::getline(in, line);
+        try {
+            size_t pos;
+            
+            float x = std::stof(line, &pos);
+            float y = std::stof(line.substr(pos));
+            shape.vertices[i] = Point(x, y);
+        } catch(...) {
+            shape.vertices[i] = Point(0, 0);
+            std::cout << "Coordonate invalide, folosesc (0, 0).\n";
+        }
     }
     
     return in;
-    
 }
 
 Shape& Shape::operator++(){
     *this = *this+1;
     return *this;
 }
+
 Shape Shape::operator++(int){
     Shape ret = *this;
     *this = *this+1;
@@ -210,7 +270,7 @@ Shape Shape::operator++(int){
 
 Point Shape::getCentre() const {
     if (numVertices == 0) {
-        return Point(0, 0); // Returnam originea daca forma nu are varfuri
+        return Point(0, 0);
     }
 
     float sumX = 0.0f;

@@ -2,9 +2,9 @@
 
 #include "Page/page.h"
 
-class MainPage : public Page{
+class ModifyPage : public Page{
     public:
-        MainPage();
+        ModifyPage();
         
         void Load() override;
         
