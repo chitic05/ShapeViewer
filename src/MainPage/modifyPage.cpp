@@ -105,7 +105,7 @@ void ModifyPage::Load(){
         std::getline(std::cin, line);
         try{
             float angle = std::stof(line);
-            transformMatrix = Matrix::genRotateMatrix(angle);
+            transformMatrix = Matrix::genRotateMatrix(-angle);
             (*sm)[shapeIndex] = transformMatrix * (*sm)[shapeIndex];
             std::cout << "Forma rotita cu succes!\n";
         }catch(...){
