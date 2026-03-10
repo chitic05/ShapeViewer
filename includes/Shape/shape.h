@@ -102,4 +102,6 @@ class Shape{
         
         //Returneaza culoarea formei
         Color getColor() const;
+
+        //==, <, ++
 };
