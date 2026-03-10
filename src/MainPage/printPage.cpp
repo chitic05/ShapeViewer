@@ -28,23 +28,25 @@ void PrintPage::Load(){
     
     if(!sm || sm->getCount() == 0){
         std::cout << "ShapeManager gol. Nu exista shape-uri de afisat.\n";
-        std::cout << "Apasa enter pentru a merge inapoi...\n";
+        std::cout << "--Apasa enter--\n";
         std::string line;
         std::getline(std::cin, line);
     } else {
-        std::cout << "\n=== Toate Formele ===\n";
         std::cout << *sm << "\n";
         
         std::cout << "\nIntroduceti ID-ul formei pe care doriti sa o vizualizati: ";
         std::string line;
         std::getline(std::cin, line);
-        
+        if(line == ""){
+            PageManager::changePage(this->previous);
+            return;
+        }
         int selectedId = -1;
         try {
             selectedId = std::stoi(line);
         } catch(...) {
             std::cout << "ID invalid!\n";
-            std::cout << "Apasa enter pentru a merge inapoi...\n";
+            std::cout << "--Apasa enter--\n";
             std::getline(std::cin, line);
             PageManager::changePage(this->previous);
             return;
@@ -61,7 +63,7 @@ void PrintPage::Load(){
         
         if(!selectedShape) {
             std::cout << "Forma cu ID-ul " << selectedId << " nu a fost gasita!\n";
-            std::cout << "Apasa enter pentru a merge inapoi...\n";
+            std::cout << "--Apasa enter--\n";
             std::getline(std::cin, line);
             PageManager::changePage(this->previous);
             return;
@@ -71,7 +73,7 @@ void PrintPage::Load(){
         // Initialize SDL
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
             std::cerr << "SDL Init failed: " << SDL_GetError() << std::endl;
-            std::cout << "Apasa enter pentru a merge inapoi...\n";
+            std::cout << "--Apasa enter--\n";
             std::string line;
             std::getline(std::cin, line);
             PageManager::changePage(this->previous);
@@ -82,7 +84,7 @@ void PrintPage::Load(){
         if (!window) {
             std::cerr << "Window creation failed: " << SDL_GetError() << std::endl;
             SDL_Quit();
-            std::cout << "Apasa enter pentru a merge inapoi...\n";
+            std::cout << "--Apasa enter--\n";
             std::string line;
             std::getline(std::cin, line);
             PageManager::changePage(this->previous);
@@ -94,7 +96,7 @@ void PrintPage::Load(){
             std::cerr << "Renderer creation failed: " << SDL_GetError() << std::endl;
             SDL_DestroyWindow(window);
             SDL_Quit();
-            std::cout << "Apasa enter pentru a merge inapoi...\n";
+            std::cout << "--Apasa enter--\n";
             std::string line;
             std::getline(std::cin, line);
             PageManager::changePage(this->previous);

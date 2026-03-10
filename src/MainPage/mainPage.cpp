@@ -24,18 +24,23 @@ void MainPage::Load(){
     std::string line;
     std::cout << this->text << std::flush;
     std::getline(std::cin, line);
-    
+    // std::cout << next.size();
     if(onlyDigits(line)){
         int option = std::stoi(line);
         if(option == 5){
             std::cout << "Iesire...\n";
             return;
         }
-        try{
-            PageManager::changePage(this->next[option-1]);
-        }catch(const std::exception& e){
-            std::cerr << this->getName() + " couldn't load the page "+ line + " : "+ e.what() << '\n';
+        if(option <= this->next.size() && option >0){
+            try{
+                PageManager::changePage(this->next[option-1]);
+            }catch(const std::exception& e){
+                std::cerr << this->getName() + " couldn't load the page "+ line + " : "+ e.what() << '\n';
+            }
+        }else{
+            keyError(line, this->pageKey);
         }
+        
     }else
         keyError(line, this->pageKey);
 }

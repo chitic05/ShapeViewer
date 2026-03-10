@@ -25,6 +25,7 @@ void ModifyPage::Load(){
     
     if(!sm || sm->getCount() == 0){
         std::cout << "ShapeManager gol. Nu exista shape-uri de modificat.\n";
+        std::cout << "--Apasa enter--\n";
         std::getline(std::cin, line);
         PageManager::changePage(this->previous);
         return;
@@ -41,6 +42,8 @@ void ModifyPage::Load(){
     
     if(!onlyDigits(line)){
         std::cerr << "ID invalid!\n";
+        std::cout << "--Apasa enter--\n";
+
         std::getline(std::cin, line);
         PageManager::changePage(this->previous);
         return;
@@ -76,6 +79,7 @@ void ModifyPage::Load(){
     
     if(!onlyDigits(line)){
         std::cerr << "Optiune invalida!\n";
+        std::cout << "--Apasa enter--\n";
         std::getline(std::cin, line);
         PageManager::changePage(this->previous);
         return;
@@ -112,6 +116,7 @@ void ModifyPage::Load(){
     
     std::cout << "\nForme dupa modificare:\n";
     std::cout << *sm << "\n";
+    std::cout << "--Apasa enter--\n";
     std::getline(std::cin, line);
     PageManager::changePage(this->previous);
 }
