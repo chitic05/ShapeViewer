@@ -1,4 +1,4 @@
-# Proiect-1-POO
+# ShapeViewer
 
 Aplicație C++ pentru gestionarea și vizualizarea formelor geometrice cu SDL3.
 
