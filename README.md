@@ -25,7 +25,7 @@ cmake --build .
 ## Rulare
 
 ```bash
-./build/Shapes
+./build/ShapeViewer
 ```
 
 ## Structura Aplicației
