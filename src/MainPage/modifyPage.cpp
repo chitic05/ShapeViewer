@@ -69,6 +69,7 @@ void ModifyPage::Load(){
     std::cout << "\nAlegeti tipul de transformare:\n";
     std::cout << "1. Scalare\n";
     std::cout << "2. Rotatie\n";
+    std::cout << "3. Translatie\n";
     std::cout << "Optiune: ";
     std::getline(std::cin, line);
     
@@ -109,6 +110,20 @@ void ModifyPage::Load(){
             std::cout << "Forma rotita cu succes!\n";
         }catch(...){
             std::cerr << "Unghi invalid!\n";
+        }
+    }else if(option == 3){
+        std::cout << "Introduceti deplasarea pe axa X (ex: 50, -30): ";
+        std::getline(std::cin, line);
+        try{
+            float dx = std::stof(line);
+            std::cout << "Introduceti deplasarea pe axa Y (ex: 50, -30): ";
+            std::getline(std::cin, line);
+            float dy = std::stof(line);
+            transformMatrix = Matrix::genTranslateMatrix(dx, dy);
+            (*sm)[shapeIndex] = transformMatrix * (*sm)[shapeIndex];
+            std::cout << "Forma translatata cu succes!\n";
+        }catch(...){
+            std::cerr << "Valori de deplasare invalide!\n";
         }
     }else{
         std::cerr << "Optiune invalida!\n";
