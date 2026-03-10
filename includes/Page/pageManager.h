@@ -13,7 +13,7 @@ class PageManager{
         
         static Page* getPage(const std::string& pageKey);
         
-        static void setSM(ShapeManager& sm);
+        static void setSM(ShapeManager* sm);
         
         static ShapeManager*& getSM();
         

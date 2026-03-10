@@ -57,7 +57,7 @@ void ModifyPage::Load(){
     }
     
     if(shapeIndex == -1){
-        std::cerr << "Shape cu ID-ul " << shapeId << " nu a fost gasit!\n";
+        std::cerr << "Forma cu ID-ul " << shapeId << " nu a fost gasita!\n";
         std::getline(std::cin, line);
         PageManager::changePage(this->previous);
         return;

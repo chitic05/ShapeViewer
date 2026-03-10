@@ -10,6 +10,7 @@ MainPage::MainPage(){
                  "2. Sterge forma\n"
                  "3. Modifica forma\n"
                  "4. Afiseaza forme\n"
+                 "5. Iesire\n"
                  "--Scrie numarul optiunii si apasa enter--\n";
 }
 
@@ -25,8 +26,13 @@ void MainPage::Load(){
     std::getline(std::cin, line);
     
     if(onlyDigits(line)){
+        int option = std::stoi(line);
+        if(option == 5){
+            std::cout << "Iesire...\n";
+            return;
+        }
         try{
-            PageManager::changePage(this->next[std::stoi(line)-1]);
+            PageManager::changePage(this->next[option-1]);
         }catch(const std::exception& e){
             std::cerr << this->getName() + " couldn't load the page "+ line + " : "+ e.what() << '\n';
         }

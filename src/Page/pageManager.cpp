@@ -21,8 +21,8 @@ std::unordered_map<std::string, std::unique_ptr<Page>> PageManager::allPages = [
     return pages;
 }();
 
-void PageManager::setSM(ShapeManager& sm){
-    PageManager::shapeManager = &sm;
+void PageManager::setSM(ShapeManager* sm){
+    PageManager::shapeManager = sm;
 }
 
 ShapeManager*& PageManager::getSM(){

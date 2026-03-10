@@ -248,12 +248,11 @@ std::istream& operator>>(std::istream& in, Shape& shape){
             float x = std::stof(line, &pos);
             float y = std::stof(line.substr(pos));
             shape.vertices[i] = Point(x, y);
-        } catch(...) {
+        } catch(...) { // prinde toate erorile
             shape.vertices[i] = Point(0, 0);
             std::cout << "Coordonate invalide, folosesc (0, 0).\n";
         }
     }
-    
     return in;
 }
 
@@ -300,4 +299,12 @@ bool Shape::operator<(const Shape& other) const {
 
 unsigned int Shape::getId() const {
     return id;
+}
+
+unsigned int Shape::getCount() const {
+    return numVertices;
+}
+
+Color Shape::getColor() const {
+    return color;
 }

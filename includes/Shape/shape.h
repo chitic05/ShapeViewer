@@ -96,4 +96,10 @@ class Shape{
 
         //Returneaza ID-ul formei
         unsigned int getId() const;
+        
+        //Returneaza numarul de varfuri
+        unsigned int getCount() const;
+        
+        //Returneaza culoarea formei
+        Color getColor() const;
 };

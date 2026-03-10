@@ -39,7 +39,7 @@ void DeletePage::Load(){
             try{
                 unsigned int id = std::stoi(line);
                 *sm -= id;  // stergem forma cu ID-ul dat
-                std::cout << "Shape sters cu succes!\n";
+                std::cout << "Forma stearsa cu succes!\n";
             }catch(const std::exception& e){
                 std::cerr << "Eroare la stergere: " << e.what() << '\n';
             }
