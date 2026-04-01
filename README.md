@@ -5,7 +5,7 @@ A C++ application for managing and visualizing geometric shapes with SDL3.
 ## Requirements
 
 - CMake (3.10+)
-- Compilator C++17 (GCC/Clang)
+- C++17 compiler (GCC/Clang)
 - SDL3 (included in `externals/`)
 
 ## Build
@@ -15,11 +15,30 @@ A C++ application for managing and visualizing geometric shapes with SDL3.
 mkdir -p build
 cd build
 
-# Configure the project
-cmake ..
+# Configure the project in Release mode
+cmake .. -DCMAKE_BUILD_TYPE=Release
 
 # Compile
 cmake --build .
+```
+
+### Optional: Debug Build
+
+```bash
+mkdir -p build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Debug
+cmake --build .
+```
+
+### Note for Multi-Config Generators
+
+If you use a multi-config generator (for example Visual Studio), configure normally and select
+the build configuration at build time:
+
+```bash
+cmake -S . -B build
+cmake --build build --config Release
 ```
 
 ## Run
