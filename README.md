@@ -1,66 +1,66 @@
 # ShapeViewer
 
-Aplicație C++ pentru gestionarea și vizualizarea formelor geometrice cu SDL3.
+A C++ application for managing and visualizing geometric shapes with SDL3.
 
-## Cerințe
+## Requirements
 
 - CMake (3.10+)
 - Compilator C++17 (GCC/Clang)
-- SDL3 (inclus în `externals/`)
+- SDL3 (included in `externals/`)
 
-## Compilare
+## Build
 
 ```bash
-# Creează directorul build dacă nu există
+# Create the build directory if it doesn't exist
 mkdir -p build
 cd build
 
-# Configurează proiectul
+# Configure the project
 cmake ..
 
-# Compilează
+# Compile
 cmake --build .
 ```
 
-## Rulare
+## Run
 
 ```bash
 ./build/ShapeViewer
 ```
 
-## Structura Aplicației
+## Application Structure
 
-### Pagini Principale
+### Main Pages
 
-1. **Main Page** - Meniul principal cu 5 opțiuni:
-   - Adaugă formă
-   - Șterge formă
-   - Modifică formă
-   - Afișează forme
-   - Ieșire
+1. **Main Page** - The main menu with 5 options:
+   - Add shape
+   - Delete shape
+   - Modify shape
+   - Display shapes
+   - Exit
 
-2. **Add Page** - Adaugă forme noi:
-   - Introducere număr de vârfuri
-   - Coordonate pentru fiecare vârf
-   - Selectare culoare
+2. **Add Page** - Adds new shapes:
+   - Enter number of vertices
+   - Coordinates for each vertex
+   - Color selection
 
-3. **Delete Page** - Șterge forme după ID:
-   - Afișează lista formelor existente
-   - Solicită ID-ul formei de șters
+3. **Delete Page** - Deletes shapes by ID:
+   - Displays the list of existing shapes
+   - Prompts for the shape ID to delete
 
-4. **Modify Page** - Transformări geometrice:
-   - Rotație în jurul centrului formei
-   - Scalare față de centru
-   - Translație (deplasare)
+4. **Modify Page** - Geometric transformations:
+   - Rotation around the shape center
+   - Scaling relative to the center
+   - Translation (movement)
 
-5. **Print Page** - Vizualizare forme:
-   - Listează toate formele cu detalii
-   - Vizualizare grafică SDL cu selecție după ID
+5. **Print Page** - Shape visualization:
+   - Lists all shapes with details
+   - SDL graphical view with ID-based selection
 
-### Clase Principale
+### Main Classes
 
-- **Shape** - Reprezentarea unei forme geometrice (poligon)
-- **ShapeManager** - Gestionează colecția de forme
-- **PageManager** - Controlează navigarea între pagini
-- **Point** - Punct 2D pentru coordonate
-- **Matrix** - Operații matriceale pentru transformări
+- **Shape** - Representation of a geometric shape (polygon)
+- **ShapeManager** - Manages the collection of shapes
+- **PageManager** - Controls navigation between pages
+- **Point** - 2D point for coordinates
+- **Matrix** - Matrix operations for transformations

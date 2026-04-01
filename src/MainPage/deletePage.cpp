@@ -8,9 +8,9 @@
 DeletePage::DeletePage()
 {
     this->pageKey = "deletePage";
-    this->pageName = "Pagina Stergere Forma";
-    this->text = "\tStergere Forma\n"
-                 "--Scrie b si apasa enter pentru a merge inapoi--\n";
+    this->pageName = "Delete Shape Page";
+    this->text = "\tDelete Shape\n"
+                 "--Type b and press Enter to go back--\n";
 }
 
 void DeletePage::initNeighbourPages()
@@ -27,12 +27,12 @@ void DeletePage::Load()
 
     if (!sm || sm->getCount() == 0)
     {
-        std::cout << "ShapeManager gol. Nu exista shape-uri de sters.\n";
+        std::cout << "ShapeManager is empty. There are no shapes to delete.\n";
     }
     else
     {
         std::cout << *sm << "\n";
-        std::cout << "Introduceti ID-ul formei de sters: ";
+        std::cout << "Enter the ID of the shape to delete: ";
         std::getline(std::cin, line);
 
         if (line.length() == 1 && tolower(line[0]) == 'b')
@@ -53,16 +53,16 @@ void DeletePage::Load()
             {
                 unsigned int id = std::stoi(line);
                 *sm -= id; // stergem forma cu ID-ul dat
-                std::cout << "Forma stearsa cu succes!\n";
+                std::cout << "Shape deleted successfully!\n";
             }
             catch (const std::exception &e)
             {
-                std::cerr << "Eroare la stergere: " << e.what() << '\n';
+                std::cerr << "Delete error: " << e.what() << '\n';
             }
         }
     }
 
-    std::cout << "--Apasa enter--\n";
+    std::cout << "--Press Enter--\n";
     std::getline(std::cin, line);
     try
     {

@@ -13,9 +13,9 @@ const int WINDOW_HEIGHT = 600;
 PrintPage::PrintPage()
 {
     this->pageKey = "printPage";
-    this->pageName = "Pagina Afisare Forme";
-    this->text = "\tToate Formele\n"
-                 "--Apasa enter pentru a merge inapoi--\n";
+    this->pageName = "Display Shapes Page";
+    this->text = "\tAll Shapes\n"
+                 "--Press Enter to go back--\n";
 }
 
 void PrintPage::initNeighbourPages()
@@ -31,8 +31,8 @@ void PrintPage::Load()
 
     if (!sm || sm->getCount() == 0)
     {
-        std::cout << "ShapeManager gol. Nu exista shape-uri de afisat.\n";
-        std::cout << "--Apasa enter--\n";
+        std::cout << "ShapeManager is empty. There are no shapes to display.\n";
+        std::cout << "--Press Enter--\n";
         std::string line;
         std::getline(std::cin, line);
     }
@@ -40,7 +40,7 @@ void PrintPage::Load()
     {
         std::cout << *sm << "\n";
 
-        std::cout << "\nIntroduceti ID-ul formei pe care doriti sa o vizualizati: ";
+        std::cout << "\nEnter the ID of the shape you want to view: ";
         std::string line;
         std::getline(std::cin, line);
         if (line == "")
@@ -55,8 +55,8 @@ void PrintPage::Load()
         }
         catch (...)
         {
-            std::cout << "ID invalid!\n";
-            std::cout << "--Apasa enter--\n";
+            std::cout << "Invalid ID!\n";
+            std::cout << "--Press Enter--\n";
             std::getline(std::cin, line);
             PageManager::changePage(this->previous);
             return;
@@ -75,19 +75,19 @@ void PrintPage::Load()
 
         if (!selectedShape)
         {
-            std::cout << "Forma cu ID-ul " << selectedId << " nu a fost gasita!\n";
-            std::cout << "--Apasa enter--\n";
+            std::cout << "Shape with ID " << selectedId << " was not found!\n";
+            std::cout << "--Press Enter--\n";
             std::getline(std::cin, line);
             PageManager::changePage(this->previous);
             return;
         }
 
-        std::cout << "\nDesenez forma: " << *selectedShape << "\n" << std::flush;
+        std::cout << "\nDrawing shape: " << *selectedShape << "\n" << std::flush;
         // Initialize SDL
         if (SDL_Init(SDL_INIT_VIDEO) < 0)
         {
             std::cerr << "SDL Init failed: " << SDL_GetError() << std::endl;
-            std::cout << "--Apasa enter--\n";
+            std::cout << "--Press Enter--\n";
             std::string line;
             std::getline(std::cin, line);
             PageManager::changePage(this->previous);
@@ -99,7 +99,7 @@ void PrintPage::Load()
         {
             std::cerr << "Window creation failed: " << SDL_GetError() << std::endl;
             SDL_Quit();
-            std::cout << "--Apasa enter--\n";
+            std::cout << "--Press Enter--\n";
             std::string line;
             std::getline(std::cin, line);
             PageManager::changePage(this->previous);
@@ -112,14 +112,14 @@ void PrintPage::Load()
             std::cerr << "Renderer creation failed: " << SDL_GetError() << std::endl;
             SDL_DestroyWindow(window);
             SDL_Quit();
-            std::cout << "--Apasa enter--\n";
+            std::cout << "--Press Enter--\n";
             std::string line;
             std::getline(std::cin, line);
             PageManager::changePage(this->previous);
             return;
         }
 
-        std::cout << "Fereastra SDL deschisa. Apasa 'b' pentru a inchide si a reveni.\n"
+        std::cout << "SDL window opened. Press 'b' to close and return.\n"
                   << std::flush;
 
         bool running = true;
@@ -175,7 +175,7 @@ void PrintPage::Load()
         SDL_DestroyWindow(window);
         SDL_Quit();
 
-        std::cout << "Fereastra inchisa.\n" << std::flush;
+        std::cout << "Window closed.\n" << std::flush;
     }
 
     try

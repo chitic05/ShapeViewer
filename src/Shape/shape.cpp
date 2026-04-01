@@ -201,13 +201,13 @@ std::ostream &operator<<(std::ostream &out, const Shape &shape)
     switch (shape.color)
     {
     case Color::RED:
-        out << "ROSU";
+        out << "RED";
         break;
     case Color::BLUE:
-        out << "ALBASTRU";
+        out << "BLUE";
         break;
     case Color::GREEN:
-        out << "VERDE";
+        out << "GREEN";
         break;
     }
 
@@ -226,7 +226,7 @@ std::istream &operator>>(std::istream &in, Shape &shape)
 {
     std::string line;
 
-    std::cout << "Introduceti numele formei: ";
+    std::cout << "Enter shape name: ";
     std::getline(in, line);
 
     if (line.empty())
@@ -236,7 +236,7 @@ std::istream &operator>>(std::istream &in, Shape &shape)
     shape.name = new char[line.length() + 1];
     strcpy(shape.name, line.c_str());
 
-    std::cout << "Introduceti culoarea (0-ROSU, 1-ALBASTRU, 2-VERDE): ";
+    std::cout << "Enter color (0-RED, 1-BLUE, 2-GREEN): ";
     std::getline(in, line);
 
     int colorChoice = 0;
@@ -247,17 +247,17 @@ std::istream &operator>>(std::istream &in, Shape &shape)
         if (colorChoice < 0 || colorChoice > 2)
         {
             colorChoice = 0;
-            std::cout << "Culoare invalida, folosesc ROSU.\n";
+            std::cout << "Invalid color, using RED.\n";
         }
     }
     catch (...)
     {
         colorChoice = 0;
-        std::cout << "Culoare invalida, folosesc ROSU.\n";
+        std::cout << "Invalid color, using RED.\n";
     }
     shape.color = (Color)colorChoice;
 
-    std::cout << "Introduceti numarul de varfuri: ";
+    std::cout << "Enter number of vertices: ";
     std::getline(in, line);
 
     try
@@ -267,13 +267,13 @@ std::istream &operator>>(std::istream &in, Shape &shape)
         if (shape.numVertices == 0 || shape.numVertices > 1000)
         {
             shape.numVertices = 3;
-            std::cout << "Numar invalid, folosesc 3 varfuri.\n";
+            std::cout << "Invalid number, using 3 vertices.\n";
         }
     }
     catch (...)
     {
         shape.numVertices = 3;
-        std::cout << "Numar invalid, folosesc 3 varfuri.\n";
+        std::cout << "Invalid number, using 3 vertices.\n";
     }
 
     if (shape.vertices)
@@ -282,7 +282,7 @@ std::istream &operator>>(std::istream &in, Shape &shape)
 
     for (unsigned int i = 0; i < shape.numVertices; ++i)
     {
-        std::cout << "Introduceti coordonatele varfului " << (i + 1) << " (x y): ";
+        std::cout << "Enter coordinates for vertex " << (i + 1) << " (x y): ";
 
         std::getline(in, line);
         try
@@ -296,7 +296,7 @@ std::istream &operator>>(std::istream &in, Shape &shape)
         catch (...)
         { // prinde toate erorile
             shape.vertices[i] = Point(0, 0);
-            std::cout << "Coordonate invalide, folosesc (0, 0).\n";
+            std::cout << "Invalid coordinates, using (0, 0).\n";
         }
     }
     return in;

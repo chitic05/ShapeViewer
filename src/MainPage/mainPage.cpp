@@ -5,14 +5,14 @@
 MainPage::MainPage()
 {
     this->pageKey = "mainPage";
-    this->pageName = "Pagina Principala";
-    this->text = "\tMeniu Principal\n"
-                 "1. Adauga forma\n"
-                 "2. Sterge forma\n"
-                 "3. Modifica forma\n"
-                 "4. Afiseaza forme\n"
-                 "5. Iesire\n"
-                 "--Scrie numarul optiunii si apasa enter--\n";
+    this->pageName = "Main Page";
+    this->text = "\tMain Menu\n"
+                 "1. Add shape\n"
+                 "2. Delete shape\n"
+                 "3. Modify shape\n"
+                 "4. Display shapes\n"
+                 "5. Exit\n"
+                 "--Type the option number and press Enter--\n";
 }
 
 void MainPage::initNeighbourPages()
@@ -34,7 +34,7 @@ void MainPage::Load()
         int option = std::stoi(line);
         if (option == 5)
         {
-            std::cout << "Iesire...\n";
+            std::cout << "Exiting...\n";
             return;
         }
         if (option <= this->next.size() && option > 0)

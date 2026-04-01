@@ -7,10 +7,10 @@
 AddPage::AddPage()
 {
     this->pageKey = "addPage";
-    this->pageName = "Pagina Adaugare Forma";
-    this->text = "\tAdaugare Forma\n"
-                 "--Scrie b si apasa enter pentru a merge inapoi--\n"
-                 "--Apasa enter pentru a continua--\n";
+    this->pageName = "Add Shape Page";
+    this->text = "\tAdd Shape\n"
+                 "--Type b and press Enter to go back--\n"
+                 "--Press Enter to continue--\n";
 }
 
 void AddPage::initNeighbourPages()
@@ -46,15 +46,15 @@ void AddPage::Load()
         if (sm)
         {
             *sm += shape;
-            std::cout << "Shape adaugat cu succes!\n";
+            std::cout << "Shape added successfully!\n";
         }
         else
         {
-            std::cerr << "ShapeManager nu este initializat!\n";
+            std::cerr << "ShapeManager is not initialized!\n";
         }
     }
 
-    std::cout << "--Apasa enter--\n";
+    std::cout << "--Press Enter--\n";
     try
     {
         PageManager::changePage(this->previous);

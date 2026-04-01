@@ -103,7 +103,7 @@ Matrix Matrix::operator+(const Matrix &other) const
 {
     if (rows != other.rows || cols != other.cols)
     {
-        std::cerr << "Nu se poate face aceasta adunare\n";
+        std::cerr << "This addition cannot be performed\n";
         return Matrix();
     }
 
@@ -121,7 +121,7 @@ Matrix Matrix::operator-(const Matrix &other) const
 {
     if (rows != other.rows || cols != other.cols)
     {
-        std::cerr << "Nu se poate face aceasta scadere\n";
+        std::cerr << "This subtraction cannot be performed\n";
         return Matrix();
     }
 
@@ -139,7 +139,7 @@ Matrix Matrix::operator*(const Matrix &other) const
 {
     if (cols != other.rows)
     {
-        std::cerr << "Nu se poate face aceasta inmultire\n";
+        std::cerr << "This multiplication cannot be performed\n";
         return Matrix();
     }
 
@@ -177,13 +177,13 @@ const float *Matrix::operator[](unsigned int index) const
 {
     if (data == nullptr)
     {
-        std::cerr << "Eroare: Matrice neinitializata!\n";
+        std::cerr << "Error: Matrix is uninitialized!\n";
         return nullptr;
     }
 
     if (index >= rows)
     {
-        std::cerr << "Eroare: Indexul " << index << " este in afara limitelor (rows: " << rows
+        std::cerr << "Error: Index " << index << " is out of bounds (rows: " << rows
                   << ")\n";
         return nullptr;
     }
@@ -195,13 +195,13 @@ float *Matrix::operator[](unsigned int index)
 {
     if (data == nullptr)
     {
-        std::cerr << "Eroare: Matrice neinitializata!\n";
+        std::cerr << "Error: Matrix is uninitialized!\n";
         return nullptr;
     }
 
     if (index >= rows)
     {
-        std::cerr << "Eroare: Indexul " << index << " este in afara limitelor (rows: " << rows
+        std::cerr << "Error: Index " << index << " is out of bounds (rows: " << rows
                   << ")\n";
         return nullptr;
     }

@@ -193,7 +193,7 @@ std::ostream &operator<<(std::ostream &out, const ShapeManager &sm)
     else
     {
 
-        out << "    ID | Nume      | Culoare    | Vertices | Coordonate\n";
+        out << "    ID | Name      | Color      | Vertices | Coordinates\n";
         out << "----------------------------------------\n";
 
         for (size_t i = 0; i < sm.shapes.size(); ++i)
@@ -207,7 +207,7 @@ std::ostream &operator<<(std::ostream &out, const ShapeManager &sm)
 
 std::istream &operator>>(std::istream &in, ShapeManager &sm)
 {
-    std::cout << "Introduceti numarul de shape-uri: ";
+    std::cout << "Enter number of shapes: ";
     unsigned int newCount;
 
     in >> newCount;
