@@ -2,8 +2,13 @@
 #include "Page/pageManager.h"
 #include <iostream>
 
+Page::Page(){
+    next = new Page*[1000];
+}
+
 Page::~Page()
 {
+    delete[] next;
 }
 
 std::string Page::getName()

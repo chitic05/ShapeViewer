@@ -2,7 +2,7 @@
 #include "Page/pageManager.h"
 #include "terminal.hpp"
 
-MainPage::MainPage()
+MainPage::MainPage() : Page()
 {
     this->pageKey = "mainPage";
     this->pageName = "Main Page";
@@ -18,8 +18,10 @@ MainPage::MainPage()
 void MainPage::initNeighbourPages()
 {
     this->previous = nullptr;
-    this->next = {PageManager::getPage("addPage"), PageManager::getPage("deletePage"),
-                  PageManager::getPage("modifyPage"), PageManager::getPage("printPage")};
+    this->next[0] = PageManager::getPage("addPage");
+    this->next[1] = PageManager::getPage("deletePage");
+    this->next[2] = PageManager::getPage("modifyPage"); 
+    this->next[3] = PageManager::getPage("printPage");
 }
 
 void MainPage::Load()
@@ -37,7 +39,7 @@ void MainPage::Load()
             std::cout << "Exiting...\n";
             return;
         }
-        if (option <= this->next.size() && option > 0)
+        if (option <= 4 && option > 0)
         {
             try
             {

@@ -6,38 +6,70 @@
 
 ShapeManager::ShapeManager()
 {
+    shapesNumber = 0;  
     name = new char[8];
     strcpy(name, "Default");
-    maxCapacity = 100;
+    maxCapacity = 1000;
+    shapes = new Shape*[maxCapacity];
+    for (unsigned int i = 0; i < maxCapacity; ++i) {
+        shapes[i] = nullptr;
+    }
 }
 
 ShapeManager::ShapeManager(const char *name, unsigned int capacity)
 {
+    shapesNumber = 0;  
     this->name = new char[strlen(name) + 1];
     strcpy(this->name, name);
     maxCapacity = capacity;
+    shapes = new Shape*[maxCapacity];
+    for (unsigned int i = 0; i < maxCapacity; ++i) {
+        shapes[i] = nullptr;
+    }
 }
 
 ShapeManager::ShapeManager(const char *name)
 {
+    shapesNumber = 0;  
     this->name = new char[strlen(name) + 1];
     strcpy(this->name, name);
-    maxCapacity = 100;
+    maxCapacity = 1000;
+    shapes = new Shape*[maxCapacity];
+    for (unsigned int i = 0; i < maxCapacity; ++i) {
+        shapes[i] = nullptr;
+    }
 }
 
 ShapeManager::ShapeManager(unsigned int capacity)
 {
+    shapesNumber = 0;  
     this->name = new char[8];
     strcpy(this->name, "Default");
     maxCapacity = capacity;
+    shapes = new Shape*[maxCapacity];
+    for (unsigned int i = 0; i < maxCapacity; ++i) {
+        shapes[i] = nullptr;
+    }
 }
 
 ShapeManager::ShapeManager(const ShapeManager &other)
-{
-    shapes = other.shapes;
+{   
+    shapesNumber = other.shapesNumber;
+    maxCapacity = other.maxCapacity;
     name = new char[strlen(other.name) + 1];
     strcpy(name, other.name);
-    maxCapacity = other.maxCapacity;
+    
+    shapes = new Shape*[maxCapacity];
+    for (unsigned int i = 0; i < maxCapacity; ++i) {
+        shapes[i] = nullptr;
+    }
+    
+    // Deep copy - create new Shape objects using clone() for polymorphic copying
+    for (int i = 0; i < other.shapesNumber; ++i) {
+        if (other.shapes[i] != nullptr) {
+            shapes[i] = other.shapes[i]->clone();
+        }
+    }
 }
 
 ShapeManager &ShapeManager::operator=(const ShapeManager &other)
@@ -45,27 +77,56 @@ ShapeManager &ShapeManager::operator=(const ShapeManager &other)
     if (this == &other)
         return *this;
 
+    // Delete existing shapes
+    for (int i = 0; i < shapesNumber; ++i) {
+        if (shapes[i] != nullptr) {
+            delete shapes[i];
+            shapes[i] = nullptr;
+        }
+    }
+    delete[] shapes;
     delete[] name;
-    shapes = other.shapes;
 
+    // Copy data from other
+    shapesNumber = other.shapesNumber;
+    maxCapacity = other.maxCapacity;
     name = new char[strlen(other.name) + 1];
     strcpy(name, other.name);
-    maxCapacity = other.maxCapacity;
+    
+    shapes = new Shape*[maxCapacity];
+    for (unsigned int i = 0; i < maxCapacity; ++i) {
+        shapes[i] = nullptr;
+    }
+    
+    // Deep copy shapes using clone() for polymorphic copying
+    for (int i = 0; i < other.shapesNumber; ++i) {
+        if (other.shapes[i] != nullptr) {
+            shapes[i] = other.shapes[i]->clone();
+        }
+    }
 
     return *this;
 }
 
 ShapeManager::~ShapeManager()
 {
+    // Delete all Shape objects
+    for (int i = 0; i < shapesNumber; ++i) {
+        if (shapes[i] != nullptr) {
+            delete shapes[i];
+            shapes[i] = nullptr;
+        }
+    }
+    delete[] shapes;
     delete[] name;
 
     if (PageManager::getSM() == this)
         PageManager::getSM() = nullptr;
 }
 
-Shape &ShapeManager::operator[](unsigned int index)
+Shape *ShapeManager::operator[](unsigned int index)
 {
-    if (index >= shapes.size())
+    if (index >= shapesNumber)
     {
         throw std::out_of_range("ShapeManager index out of bounds");
     }
@@ -73,9 +134,9 @@ Shape &ShapeManager::operator[](unsigned int index)
     return shapes[index];
 }
 
-const Shape &ShapeManager::operator[](unsigned int index) const
+const Shape *ShapeManager::operator[](unsigned int index) const
 {
-    if (index >= shapes.size())
+    if (index >= shapesNumber)
     {
         throw std::out_of_range("ShapeManager index out of bounds");
     }
@@ -83,44 +144,58 @@ const Shape &ShapeManager::operator[](unsigned int index) const
     return shapes[index];
 }
 
-ShapeManager ShapeManager::operator+(const Shape &shape) const
+ShapeManager ShapeManager::operator+(Shape* shape) const
 {
     ShapeManager result = *this;
 
-    result.shapes.push_back(shape);
+    if (result.shapesNumber < result.maxCapacity) {
+        result.shapes[result.shapesNumber++] = shape;
+    }
     return result;
 }
 
-ShapeManager &ShapeManager::operator+=(const Shape &shape)
+ShapeManager &ShapeManager::operator+=(Shape* shape)
 {
-    shapes.push_back(shape);
+    if (shapesNumber < maxCapacity) {
+        shapes[shapesNumber++] = shape;
+    }
     return *this;
 }
 
 ShapeManager ShapeManager::operator-(unsigned int id) const
 {
-    ShapeManager result = *this;
+    ShapeManager result;
+    result.name = new char[strlen(this->name) + 1];
+    strcpy(result.name, this->name);
+    result.maxCapacity = this->maxCapacity;
+    result.shapesNumber = 0;
+    
+    result.shapes = new Shape*[result.maxCapacity];
+    for (unsigned int i = 0; i < result.maxCapacity; ++i) {
+        result.shapes[i] = nullptr;
+    }
 
-    for (size_t i = 0; i < result.shapes.size(); ++i)
-    {
-        if (result.shapes[i].getId() == id)
-        {
-
-            result.shapes.erase(result.shapes.begin() + i);
-            break;
+    // Copy all shapes except the one with matching id using clone()
+    for (int i = 0; i < this->shapesNumber; ++i) {
+        if (this->shapes[i]->getId() != id) {
+            result.shapes[result.shapesNumber++] = this->shapes[i]->clone();
         }
     }
+    
     return result;
 }
 
 ShapeManager &ShapeManager::operator-=(unsigned int id)
 {
-    for (size_t i = 0; i < shapes.size(); ++i)
-    {
-        if (shapes[i].getId() == id)
-        {
-
-            shapes.erase(shapes.begin() + i);
+    for (int i = 0; i < shapesNumber; ++i) {
+        if (shapes[i]->getId() == id) {
+            delete shapes[i];
+            // Shift remaining shapes
+            for (int j = i; j < shapesNumber - 1; ++j) {
+                shapes[j] = shapes[j + 1];
+            }
+            shapes[shapesNumber - 1] = nullptr;
+            shapesNumber--;
             break;
         }
     }
@@ -129,9 +204,8 @@ ShapeManager &ShapeManager::operator-=(unsigned int id)
 
 ShapeManager &ShapeManager::operator++()
 {
-    for (size_t i = 0; i < shapes.size(); ++i)
-    {
-        ++shapes[i];
+    for (int i = 0; i < shapesNumber; ++i) {
+        ++(*shapes[i]);
     }
     return *this;
 }
@@ -145,27 +219,22 @@ ShapeManager ShapeManager::operator++(int)
 
 bool ShapeManager::operator==(const ShapeManager &other) const
 {
-    if (shapes.size() != other.shapes.size())
+    if (shapesNumber != other.shapesNumber)
     {
         return false;
     }
 
-    for (size_t i = 0; i < shapes.size(); ++i)
-    {
+    for (int i = 0; i < shapesNumber; ++i) {
         bool found = false;
 
-        for (size_t j = 0; j < other.shapes.size(); ++j)
-        {
-            if (shapes[i] == other.shapes[j])
-            {
-
+        for (int j = 0; j < other.shapesNumber; ++j) {
+            if (*shapes[i] == *other.shapes[j]) {
                 found = true;
                 break;
             }
         }
 
-        if (!found)
-        {
+        if (!found) {
             return false;
         }
     }
@@ -175,7 +244,7 @@ bool ShapeManager::operator==(const ShapeManager &other) const
 
 bool ShapeManager::operator<(const ShapeManager &other) const
 {
-    return shapes.size() < other.shapes.size();
+    return shapesNumber < other.shapesNumber;
 }
 
 std::ostream &operator<<(std::ostream &out, const ShapeManager &sm)
@@ -183,22 +252,20 @@ std::ostream &operator<<(std::ostream &out, const ShapeManager &sm)
     out << "========================================\n";
     out << "Shape Manager: " << sm.name << "\n";
 
-    out << "Total shapes: " << sm.shapes.size() << "\n";
+    out << "Total shapes: " << sm.shapesNumber << "\n";
     out << "========================================\n";
 
-    if (sm.shapes.empty())
+    if (sm.shapesNumber == 0)
     {
         out << "  (No shapes)\n";
     }
     else
     {
-
         out << "    ID | Name      | Color      | Vertices | Coordinates\n";
         out << "----------------------------------------\n";
 
-        for (size_t i = 0; i < sm.shapes.size(); ++i)
-        {
-            out << "[" << (i + 1) << "] " << sm.shapes[i] << "\n";
+        for (int i = 0; i < sm.shapesNumber; ++i) {
+            out << "[" << (i + 1) << "] " << *sm.shapes[i] << "\n";
         }
     }
     out << "========================================\n";
@@ -212,16 +279,22 @@ std::istream &operator>>(std::istream &in, ShapeManager &sm)
 
     in >> newCount;
 
-    sm.shapes.clear();
+    // Clear existing shapes
+    for (int i = 0; i < sm.shapesNumber; ++i) {
+        if (sm.shapes[i] != nullptr) {
+            delete sm.shapes[i];
+            sm.shapes[i] = nullptr;
+        }
+    }
+    sm.shapesNumber = 0;
 
-    for (unsigned int i = 0; i < newCount; ++i)
-    {
+    for (unsigned int i = 0; i < newCount && i < sm.maxCapacity; ++i) {
         std::cout << "Shape " << (i + 1) << ":\n";
 
         Shape temp;
         in >> temp;
 
-        sm.shapes.push_back(temp);
+        sm.shapes[sm.shapesNumber++] = new Shape(temp);
     }
 
     return in;
@@ -229,7 +302,7 @@ std::istream &operator>>(std::istream &in, ShapeManager &sm)
 
 unsigned int ShapeManager::getCount() const
 {
-    return shapes.size();
+    return shapesNumber;
 }
 
 const char *ShapeManager::getName() const

@@ -2,7 +2,7 @@
 
 #include "Page/page.h"
 
-class ModifyPage : public Page
+class ModifyPage final : public Page
 {
 public:
     ModifyPage();

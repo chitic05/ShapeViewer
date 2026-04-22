@@ -2,7 +2,7 @@
 
 #include "Page/page.h"
 
-class DeletePage : public Page
+class DeletePage final : public Page
 {
 public:
     DeletePage();

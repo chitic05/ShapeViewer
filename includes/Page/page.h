@@ -8,15 +8,17 @@ class Page
 {
 
 public:
+    Page();
+
     virtual void initNeighbourPages() = 0;
 
     virtual void Load() = 0;
 
-    virtual std::string getName();
+    std::string getName();
 
-    virtual std::string getKey();
+    std::string getKey();
 
-    virtual Page *getPrevious();
+    Page *getPrevious();
 
     void changePage(Page *page);
 
@@ -29,7 +31,7 @@ protected:
 
     Page *previous;
 
-    std::vector<Page *> next;
+    Page** next;
 
     std::string text;
 };

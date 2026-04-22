@@ -4,6 +4,7 @@
 #include <limits>
 #include <stdexcept>
 #include <string>
+#include <math.h>
 
 unsigned int Shape::newestId = 0;
 
@@ -118,6 +119,11 @@ Shape::Shape(const Shape &other) : id(other.id)
     color = other.color;
     name = new char[strlen(other.name) + 1];
     strcpy(name, other.name);
+}
+
+Shape* Shape::clone() const
+{
+    return new Shape(*this);
 }
 
 Shape &Shape::operator=(const Shape &other)
@@ -363,4 +369,29 @@ unsigned int Shape::getCount() const
 Color Shape::getColor() const
 {
     return color;
+}
+
+float Shape::getPerimeter(){
+    if (numVertices < 2) {
+        return 0.0f;
+    }
+
+    float perimeter = 0.0f;
+
+    for (int i = 0; i < numVertices; ++i) {
+        int next_i = (i + 1) % numVertices;
+
+        float dx = vertices[i][0] - vertices[next_i][0];
+        float dy = vertices[i][1] - vertices[next_i][1];
+
+        perimeter += sqrtf((dx * dx) + (dy * dy));
+    }
+
+    return perimeter;
+}
+
+Shape *Shape::create() {
+    Shape *shape = new Shape();
+    std::cin >> *shape;
+    return shape;
 }

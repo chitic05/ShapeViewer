@@ -2,11 +2,15 @@
 #include "Math/matrix.h"
 #include "Page/pageManager.h"
 #include "Shape/shape.h"
+#include "Shape/shapes/rectangle.h"
+#include "Shape/shapes/diamond.h"
+#include "Shape/shapes/square.h"
 #include "Shape/shapeManager.h"
 #include "terminal.hpp"
 #include <string>
+#include <typeinfo>
 
-ModifyPage::ModifyPage()
+ModifyPage::ModifyPage() : Page()
 {
     this->pageKey = "modifyPage";
     this->pageName = "Modify Shape Page";
@@ -35,7 +39,68 @@ void ModifyPage::Load()
         return;
     }
 
-    std::cout << *sm << "\n";
+    std::cout << "\n--- Filter Options ---\n";
+    std::cout << "1. Modify from all shapes\n";
+    std::cout << "2. Modify Rectangle only\n";
+    std::cout << "3. Modify Diamond only\n";
+    std::cout << "4. Modify Square only\n";
+    std::cout << "0. Go back\n";
+    std::cout << "Enter your choice: ";
+    std::string choice;
+    std::getline(std::cin, choice);
+
+    if (choice == "0" || choice == "")
+    {
+        PageManager::changePage(this->previous);
+        return;
+    }
+
+    // Clear terminal for cleaner display
+    clearTerminal();
+
+    // Display filtered shapes and ask for ID
+    if (choice == "1" || choice == "2" || choice == "3" || choice == "4")
+    {
+        std::cout << "\n========== Filtered Shapes ==========\n";
+        std::cout << "    ID | Name      | Color      | Vertices | Coordinates\n";
+        std::cout << "----------------------------------------\n";
+
+        int matchCount = 0;
+        for (int i = 0; i < sm->getCount(); ++i)
+        {
+            bool matches = false;
+
+            if (choice == "1")
+            {
+                matches = true;
+            }
+            else if (choice == "2")
+            {
+                matches = (typeid(*(*sm)[i]) == typeid(Rectangle));
+            }
+            else if (choice == "3")
+            {
+                matches = (typeid(*(*sm)[i]) == typeid(Diamond));
+            }
+            else if (choice == "4")
+            {
+                matches = (typeid(*(*sm)[i]) == typeid(Square));
+            }
+
+            if (matches)
+            {
+                matchCount++;
+                std::cout << *(*sm)[i] << "\n";
+            }
+        }
+
+        if (matchCount == 0)
+        {
+            std::cout << "  (No shapes matching the filter)\n";
+        }
+        std::cout << "====================================\n";
+    }
+
     std::cout << "Enter the ID of the shape to modify: ";
     std::getline(std::cin, line);
 
@@ -60,7 +125,7 @@ void ModifyPage::Load()
     int shapeIndex = -1;
     for (unsigned int i = 0; i < sm->getCount(); ++i)
     {
-        if ((*sm)[i].getId() == shapeId)
+        if ((*sm)[i]->getId() == shapeId)
         {
             shapeIndex = i;
             break;
@@ -109,7 +174,7 @@ void ModifyPage::Load()
         {
             float scale = std::stof(line);
             transformMatrix = Matrix::genScaleMatrix(scale);
-            (*sm)[shapeIndex] = transformMatrix * (*sm)[shapeIndex];
+            *(*sm)[shapeIndex] = transformMatrix * *(*sm)[shapeIndex];
             std::cout << "Shape scaled successfully!\n";
         }
         catch (...)
@@ -125,7 +190,7 @@ void ModifyPage::Load()
         {
             float angle = std::stof(line);
             transformMatrix = Matrix::genRotateMatrix(-angle);
-            (*sm)[shapeIndex] = transformMatrix * (*sm)[shapeIndex];
+            *(*sm)[shapeIndex] = transformMatrix * *(*sm)[shapeIndex];
             std::cout << "Shape rotated successfully!\n";
         }
         catch (...)
@@ -144,7 +209,7 @@ void ModifyPage::Load()
             std::getline(std::cin, line);
             float dy = std::stof(line);
             transformMatrix = Matrix::genTranslateMatrix(dx, dy);
-            (*sm)[shapeIndex] = transformMatrix * (*sm)[shapeIndex];
+            *(*sm)[shapeIndex] = transformMatrix * *(*sm)[shapeIndex];
             std::cout << "Shape translated successfully!\n";
         }
         catch (...)

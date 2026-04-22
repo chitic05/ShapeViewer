@@ -1,12 +1,12 @@
 #pragma once
 #include "Shape/shape.h"
-#include <vector>
 
 class ShapeManager
 {
 private:
-    // Vector cu toate formele
-    std::vector<Shape> shapes;
+    // Dynamic array of Shape pointers for polymorphic storage
+    Shape** shapes;
+    int shapesNumber;
 
     // Numele managerului (alocat dinamic)
     char *name;
@@ -35,17 +35,17 @@ public:
     // Destructorul pentru a nu avea pierderi de memorie
     ~ShapeManager();
 
-    // Acces modificabil la o forma dupa index
-    Shape &operator[](unsigned int index);
+    // Access Shape pointer by index
+    Shape *operator[](unsigned int index);
 
-    // Acces const la o forma dupa index
-    const Shape &operator[](unsigned int index) const;
+    // Const access Shape pointer by index
+    const Shape *operator[](unsigned int index) const;
 
-    // Creeaza un manager nou cu forma adaugata
-    ShapeManager operator+(const Shape &shape) const;
+    // Creeaza un manager nou cu forma adaugata (takes ownership of pointer)
+    ShapeManager operator+(Shape* shape) const;
 
-    // Adauga o forma in manager
-    ShapeManager &operator+=(const Shape &shape);
+    // Adauga o forma in manager (takes ownership of pointer)
+    ShapeManager &operator+=(Shape* shape);
 
     // Creeaza un manager nou fara forma cu id-ul dat
     ShapeManager operator-(unsigned int id) const;

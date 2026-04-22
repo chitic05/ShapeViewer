@@ -83,3 +83,12 @@ cmake --build build --config Release
 - **PageManager** - Controls navigation between pages
 - **Point** - 2D point for coordinates
 - **Matrix** - Matrix operations for transformations
+
+
+##TO DO
+
+1. Shape -> Pralelipiped -> romb, patrat, drepthughi
+2. Shape -> Romb        -> patrat (diamant)
+         -> Dreptunghi
+3.Downcasting
+4.Meniul crud

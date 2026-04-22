@@ -2,7 +2,7 @@
 
 #include "Page/page.h"
 
-class PrintPage : public Page
+class PrintPage final : public Page
 {
 public:
     PrintPage();

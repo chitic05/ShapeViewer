@@ -2,7 +2,7 @@
 
 #include "Page/page.h"
 
-class MainPage : public Page
+class MainPage final : public Page
 {
 public:
     MainPage();

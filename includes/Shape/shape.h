@@ -14,7 +14,7 @@ enum class Color
 
 class Shape
 {
-private:
+protected:
     // Array-ul de varfuri ale formei
     Point *vertices;
 
@@ -59,11 +59,14 @@ public:
     // Face o forma rosie cu nume specificat si o muta
     Shape(unsigned int num, Point *vertices, const char *name, float centerX, float centerY);
 
-    // Destructorul pentru a nu avea pierderi de memorie
-    ~Shape();
+    // Virtual destructor for proper polymorphic cleanup
+    virtual ~Shape();
 
     // Copy constructor
     Shape(const Shape &other);
+
+    // Virtual clone method for polymorphic deep copying
+    virtual Shape* clone() const;
 
     Shape &operator=(const Shape &other);
 
@@ -106,5 +109,8 @@ public:
     // Returneaza culoarea formei
     Color getColor() const;
 
-    //==, <, ++
+    float getPerimeter();
+
+    // Static factory method - creates and initializes a Shape dynamically
+    static Shape *create();
 };
