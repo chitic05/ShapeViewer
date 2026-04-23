@@ -7,7 +7,6 @@
 #include "Shape/shapeManager.h"
 #include "terminal.hpp"
 #include <string>
-#include <typeinfo>
 #include <cstdlib>
 
 DeletePage::DeletePage() : Page()
@@ -36,7 +35,7 @@ void DeletePage::Load()
     }
     else
     {
-        std::cout << *sm << "\n";
+        // std::cout << *sm << "\n";
 
         std::cout << "\n--- Filter Options ---\n";
         std::cout << "1. Delete from all shapes\n";
@@ -63,38 +62,28 @@ void DeletePage::Load()
             std::cout << "    ID | Name      | Color      | Vertices | Coordinates\n";
             std::cout << "----------------------------------------\n";
 
-            int matchCount = 0;
-            for (int i = 0; i < sm->getCount(); ++i)
+            if (choice == "1")
             {
-                bool matches = false;
-
-                if (choice == "1")
+                // Display all shapes
+                for (int i = 0; i < sm->getCount(); ++i)
                 {
-                    matches = true;
-                }
-                else if (choice == "2")
-                {
-                    matches = (typeid(*(*sm)[i]) == typeid(Rectangle));
-                }
-                else if (choice == "3")
-                {
-                    matches = (typeid(*(*sm)[i]) == typeid(Diamond));
-                }
-                else if (choice == "4")
-                {
-                    matches = (typeid(*(*sm)[i]) == typeid(Square));
-                }
-
-                if (matches)
-                {
-                    matchCount++;
                     std::cout << *(*sm)[i] << "\n";
                 }
             }
-
-            if (matchCount == 0)
+            else if (choice == "2")
             {
-                std::cout << "  (No shapes matching the filter)\n";
+                // Display only Rectangles using dynamic_cast
+                sm->printAllRectangles();
+            }
+            else if (choice == "3")
+            {
+                // Display only Diamonds using dynamic_cast
+                sm->printAllDiamonds();
+            }
+            else if (choice == "4")
+            {
+                // Display only Squares using dynamic_cast
+                sm->printAllSquares();
             }
             std::cout << "====================================\n";
         }
@@ -124,7 +113,7 @@ void DeletePage::Load()
             }
             catch (const std::exception &e)
             {
-                std::cerr << "Delete error: " << e.what() << '\n';
+                std::cout << "Delete error: ID is invalid!\n";
             }
         }
     }

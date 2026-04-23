@@ -5,20 +5,20 @@
 #include <string>
 
 Square::Square(float side)
-    : Shape(), Rectangle(side, side), Diamond(side * std::sqrt(2.0f), side * std::sqrt(2.0f))
+    : Rectangle(side, side), Diamond(side * std::sqrt(2.0f), side * std::sqrt(2.0f))
 {
-    // Override to ensure square vertices (diamond orientation)
+    // Override to ensure square vertices (90 degrees - axis aligned)
     if (this->vertices)
         delete[] this->vertices;
     this->vertices = new Point[4];
     this->numVertices = 4;
     
-    // Square vertices at 45 degrees (diamond orientation)
-    float halfDiag = side / std::sqrt(2.0f);
-    this->vertices[0] = Point(0, halfDiag);      // Top
-    this->vertices[1] = Point(halfDiag, 0);       // Right
-    this->vertices[2] = Point(0, -halfDiag);      // Bottom
-    this->vertices[3] = Point(-halfDiag, 0);      // Left
+    // Square vertices at 90 degrees (axis-aligned)
+    float halfSide = side / 2.0f;
+    this->vertices[0] = Point(-halfSide, -halfSide);  // Bottom-left
+    this->vertices[1] = Point(halfSide, -halfSide);   // Bottom-right
+    this->vertices[2] = Point(halfSide, halfSide);    // Top-right
+    this->vertices[3] = Point(-halfSide, halfSide);   // Top-left
     
     std::cout << "[Square] Constructed (side: " << side << ")" << std::endl;
 }

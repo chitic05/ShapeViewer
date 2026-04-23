@@ -76,4 +76,9 @@ public:
 
     // Returneaza numele managerului
     const char *getName() const;
+
+    // Filter methods using dynamic_cast for type-safe filtering
+    void printAllRectangles() const;
+    void printAllDiamonds() const;
+    void printAllSquares() const;
 };

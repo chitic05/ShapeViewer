@@ -26,7 +26,7 @@ void AddPage::Load()
     initNeighbourPages();
     std::string line;
     std::cout << this->text << std::flush;
-    std::getline(std::cin, line);
+    // std::getline(std::cin, line);
 
     if (line.length() == 1 && tolower(line[0]) == 'b')
     {

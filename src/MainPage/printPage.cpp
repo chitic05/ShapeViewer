@@ -43,7 +43,7 @@ void PrintPage::Load()
     }
     else
     {
-        std::cout << *sm << "\n";
+        // std::cout << *sm << "\n";
 
         std::cout << "\n--- Filter Options ---\n";
         std::cout << "1. View all shapes\n";

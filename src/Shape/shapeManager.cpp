@@ -4,6 +4,10 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "Shape/shapes/diamond.h"
+#include "Shape/shapes/rectangle.h"
+#include "Shape/shapes/square.h"
+
 ShapeManager::ShapeManager()
 {
     shapesNumber = 0;  
@@ -308,4 +312,34 @@ unsigned int ShapeManager::getCount() const
 const char *ShapeManager::getName() const
 {
     return name;
+}
+
+void ShapeManager::printAllRectangles() const
+{
+    for (int i = 0; i < shapesNumber; ++i) {
+        Rectangle* rect = dynamic_cast<Rectangle*>(shapes[i]);
+        if (rect != nullptr) {
+            std::cout << *shapes[i] << "\n";
+        }
+    }
+}
+
+void ShapeManager::printAllDiamonds() const
+{
+    for (int i = 0; i < shapesNumber; ++i) {
+        Diamond* dia = dynamic_cast<Diamond*>(shapes[i]);
+        if (dia != nullptr) {
+            std::cout << *shapes[i] << "\n";
+        }
+    }
+}
+
+void ShapeManager::printAllSquares() const
+{
+    for (int i = 0; i < shapesNumber; ++i) {
+        Square* sq = dynamic_cast<Square*>(shapes[i]);
+        if (sq != nullptr) {
+            std::cout << *shapes[i] << "\n";
+        }
+    }
 }
