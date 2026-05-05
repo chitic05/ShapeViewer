@@ -6,19 +6,15 @@
 Rectangle::Rectangle(float w, float h)
     : Shape(), width(w), height(h)
 {
-    // Initialize 4 vertices based on width and height
+    std::cout << "    [2] Rectangle::Constructor()" << std::endl;
     if (this->vertices)
         delete[] this->vertices;
     this->vertices = new Point[4];
     this->numVertices = 4;
     
-    // Top-left
     this->vertices[0] = Point(-w / 2.0f, h / 2.0f);
-    // Top-right
     this->vertices[1] = Point(w / 2.0f, h / 2.0f);
-    // Bottom-right
     this->vertices[2] = Point(w / 2.0f, -h / 2.0f);
-    // Bottom-left
     this->vertices[3] = Point(-w / 2.0f, -h / 2.0f);
     
     std::cout << "[Rectangle] Constructed (" << w << " x " << h << ")" << std::endl;
@@ -27,6 +23,17 @@ Rectangle::Rectangle(float w, float h)
 Rectangle::Rectangle(const Rectangle &other)
     : Shape(other), width(other.width), height(other.height)
 {
+    std::cout << "    [2] Rectangle::CopyConstructor()" << std::endl;
+    if (this->vertices)
+        delete[] this->vertices;
+    this->vertices = new Point[4];
+    this->numVertices = 4;
+    
+    this->vertices[0] = Point(-width / 2.0f, height / 2.0f);
+    this->vertices[1] = Point(width / 2.0f, height / 2.0f);
+    this->vertices[2] = Point(width / 2.0f, -height / 2.0f);
+    this->vertices[3] = Point(-width / 2.0f, -height / 2.0f);
+    
     std::cout << "[Rectangle] Copy constructor" << std::endl;
 }
 
@@ -37,6 +44,7 @@ Shape* Rectangle::clone() const
 
 Rectangle::~Rectangle()
 {
+    std::cout << "    [3] Rectangle::Destructor()" << std::endl;
     std::cout << "[Rectangle] Destructed" << std::endl;
 }
 
@@ -47,6 +55,16 @@ Rectangle &Rectangle::operator=(const Rectangle &other)
         Shape::operator=(other);
         width = other.width;
         height = other.height;
+        
+        if (this->vertices)
+            delete[] this->vertices;
+        this->vertices = new Point[4];
+        this->numVertices = 4;
+        
+        this->vertices[0] = Point(-width / 2.0f, height / 2.0f);
+        this->vertices[1] = Point(width / 2.0f, height / 2.0f);
+        this->vertices[2] = Point(width / 2.0f, -height / 2.0f);
+        this->vertices[3] = Point(-width / 2.0f, -height / 2.0f);
     }
     return *this;
 }

@@ -7,18 +7,17 @@
 Square::Square(float side)
     : Rectangle(side, side), Diamond(side * std::sqrt(2.0f), side * std::sqrt(2.0f))
 {
-    // Override to ensure square vertices (90 degrees - axis aligned)
+    std::cout << "      [4] Square::Constructor()" << std::endl;
     if (this->vertices)
         delete[] this->vertices;
     this->vertices = new Point[4];
     this->numVertices = 4;
     
-    // Square vertices at 90 degrees (axis-aligned)
     float halfSide = side / 2.0f;
-    this->vertices[0] = Point(-halfSide, -halfSide);  // Bottom-left
-    this->vertices[1] = Point(halfSide, -halfSide);   // Bottom-right
-    this->vertices[2] = Point(halfSide, halfSide);    // Top-right
-    this->vertices[3] = Point(-halfSide, halfSide);   // Top-left
+    this->vertices[0] = Point(-halfSide, -halfSide);
+    this->vertices[1] = Point(halfSide, -halfSide);
+    this->vertices[2] = Point(halfSide, halfSide);
+    this->vertices[3] = Point(-halfSide, halfSide);
     
     std::cout << "[Square] Constructed (side: " << side << ")" << std::endl;
 }
@@ -26,6 +25,18 @@ Square::Square(float side)
 Square::Square(const Square &other)
     : Shape(other), Rectangle(other), Diamond(other)
 {
+    std::cout << "      [4] Square::CopyConstructor()" << std::endl;
+    if (this->vertices)
+        delete[] this->vertices;
+    this->vertices = new Point[4];
+    this->numVertices = 4;
+    
+    float halfSide = Rectangle::width / 2.0f;
+    this->vertices[0] = Point(-halfSide, -halfSide);
+    this->vertices[1] = Point(halfSide, -halfSide);
+    this->vertices[2] = Point(halfSide, halfSide);
+    this->vertices[3] = Point(-halfSide, halfSide);
+    
     std::cout << "[Square] Copy constructor" << std::endl;
 }
 
@@ -36,6 +47,7 @@ Shape* Square::clone() const
 
 Square::~Square()
 {
+    std::cout << "      [5] Square::Destructor()" << std::endl;
     std::cout << "[Square] Destructed" << std::endl;
 }
 
@@ -44,10 +56,19 @@ Square &Square::operator=(const Square &other)
     if (this != &other)
     {
         Shape::operator=(other);
-        Rectangle::width = other.Rectangle::width;
-        Rectangle::height = other.Rectangle::height;
-        Diamond::diagonal1 = other.Diamond::diagonal1;
-        Diamond::diagonal2 = other.Diamond::diagonal2;
+        Rectangle::operator=(other);
+        Diamond::operator=(other);
+        
+        if (this->vertices)
+            delete[] this->vertices;
+        this->vertices = new Point[4];
+        this->numVertices = 4;
+        
+        float halfSide = Rectangle::width / 2.0f;
+        this->vertices[0] = Point(-halfSide, -halfSide);
+        this->vertices[1] = Point(halfSide, -halfSide);
+        this->vertices[2] = Point(halfSide, halfSide);
+        this->vertices[3] = Point(-halfSide, halfSide);
     }
     return *this;
 }

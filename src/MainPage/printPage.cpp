@@ -78,23 +78,37 @@ void PrintPage::Load()
 
                 if (choice == "1")
                 {
-                    // All shapes
                     matches = true;
                 }
                 else if (choice == "2")
                 {
-                    // Rectangle only (but not Square, which is a subclass)
+                    //dynamic_cast
+                    Rectangle* rect = dynamic_cast<Rectangle*>((*sm)[i]);
+                    matches = (rect != nullptr);
+                    
+                    /*typeid way
                     matches = (typeid(*(*sm)[i]) == typeid(Rectangle));
+                    */
                 }
                 else if (choice == "3")
                 {
-                    // Diamond only (but not Square, which is a subclass)
+                    //dynamic_cast
+                    Diamond* dia = dynamic_cast<Diamond*>((*sm)[i]);
+                    matches = (dia != nullptr);
+                    
+                    /*typeid way
                     matches = (typeid(*(*sm)[i]) == typeid(Diamond));
+                    */
                 }
                 else if (choice == "4")
                 {
-                    // Square only
+                    //dynamic_cast
+                    Square* sq = dynamic_cast<Square*>((*sm)[i]);
+                    matches = (sq != nullptr);
+                    
+                    /*typeid way
                     matches = (typeid(*(*sm)[i]) == typeid(Square));
+                    */
                 }
 
                 if (matches)

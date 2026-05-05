@@ -3,17 +3,26 @@
 
 class ShapeManager
 {
+// PRIVATE: Doar ShapeManager poate accesa
 private:
-    // Dynamic array of Shape pointers for polymorphic storage
+    // VALID: ShapeManager::operator[] poate accesa shapes
+    // INVALID: Codul extern NU poate accesa shapes direct
+    // INVALID: PrintPage NU poate modifica shapes array
     Shape** shapes;
+    
+    // VALID: ShapeManager::getCount() citeste shapesNumber
+    // INVALID: Extern code NU poate citi shapesNumber direct
     int shapesNumber;
-
-    // Numele managerului (alocat dinamic)
+    
+    // VALID: ShapeManager constructor initializeaza name
+    // INVALID: Extern code NU poate modifica name direct
     char *name;
-
-    // Capacitatea maxima de forme
+    
+    // VALID: ShapeManager::operator+ foloseste maxCapacity
+    // INVALID: Codul extern NU poate verifica capacity
     unsigned int maxCapacity;
 
+// PUBLIC: Accesibil din oriunde
 public:
     // Face un manager cu nume "Default" si capacitate 100
     ShapeManager();

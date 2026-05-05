@@ -7,20 +7,15 @@
 Diamond::Diamond(float d1, float d2)
     : Shape(), diagonal1(d1), diagonal2(d2)
 {
-    // Initialize 4 vertices based on diagonals
-    // Diamond vertices at the ends of the two diagonals
+    std::cout << "    [2] Diamond::Constructor()" << std::endl;
     if (this->vertices)
         delete[] this->vertices;
     this->vertices = new Point[4];
     this->numVertices = 4;
     
-    // Top
     this->vertices[0] = Point(0, d1 / 2.0f);
-    // Right
     this->vertices[1] = Point(d2 / 2.0f, 0);
-    // Bottom
     this->vertices[2] = Point(0, -d1 / 2.0f);
-    // Left
     this->vertices[3] = Point(-d2 / 2.0f, 0);
     
     std::cout << "[Diamond] Constructed (" << d1 << ", " << d2 << ")" << std::endl;
@@ -29,6 +24,17 @@ Diamond::Diamond(float d1, float d2)
 Diamond::Diamond(const Diamond &other)
     : Shape(other), diagonal1(other.diagonal1), diagonal2(other.diagonal2)
 {
+    std::cout << "    [2] Diamond::CopyConstructor()" << std::endl;
+    if (this->vertices)
+        delete[] this->vertices;
+    this->vertices = new Point[4];
+    this->numVertices = 4;
+    
+    this->vertices[0] = Point(0, diagonal1 / 2.0f);
+    this->vertices[1] = Point(diagonal2 / 2.0f, 0);
+    this->vertices[2] = Point(0, -diagonal1 / 2.0f);
+    this->vertices[3] = Point(-diagonal2 / 2.0f, 0);
+    
     std::cout << "[Diamond] Copy constructor" << std::endl;
 }
 
@@ -39,6 +45,7 @@ Shape* Diamond::clone() const
 
 Diamond::~Diamond()
 {
+    std::cout << "    [3] Diamond::Destructor()" << std::endl;
     std::cout << "[Diamond] Destructed" << std::endl;
 }
 
@@ -49,6 +56,16 @@ Diamond &Diamond::operator=(const Diamond &other)
         Shape::operator=(other);
         diagonal1 = other.diagonal1;
         diagonal2 = other.diagonal2;
+        
+        if (this->vertices)
+            delete[] this->vertices;
+        this->vertices = new Point[4];
+        this->numVertices = 4;
+        
+        this->vertices[0] = Point(0, diagonal1 / 2.0f);
+        this->vertices[1] = Point(diagonal2 / 2.0f, 0);
+        this->vertices[2] = Point(0, -diagonal1 / 2.0f);
+        this->vertices[3] = Point(-diagonal2 / 2.0f, 0);
     }
     return *this;
 }

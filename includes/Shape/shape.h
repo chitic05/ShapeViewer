@@ -14,39 +14,45 @@ enum class Color
 
 class Shape
 {
-protected:
-    // Array-ul de varfuri ale formei
-    Point *vertices;
-
-    // Cate varfuri are forma
-    unsigned int numVertices;
-
-    // Culoarea formei
-    Color color;
-
-    // Id-ul ultimei forme create
+// PRIVATE: Doar metode din Shape pot accesa
+private:
+    // VALID: Shape::Shape() poate modifica newestId
+    // INVALID: Rectangle::Rectangle() NU poate accesa newestId (e private)
+    // INVALID: Codul extern NU poate citi newestId
     static unsigned int newestId;
 
-    // Id-ul unic al acestei forme
+// PROTECTED: Clasele derivate (Rectangle, Diamond, Square) pot accesa
+protected:
+    // VALID: Rectangle poate modifica vertices in constructor
+    // INVALID: Codul extern NU poate accesa vertices direct
+    // INVALID: Clasa Page (alta ierarhie) NU poate accesa vertices
+    Point *vertices;
+    
+    // VALID: Diamond poate citi/modifica numVertices
+    // INVALID: Extern code NU poate modifica numVertices
+    unsigned int numVertices;
+    
+    // VALID: Square poate folosi color in metoda Load()
+    // INVALID: Cod extern NU poate schimba color direct
+    Color color;
+    
+    // VALID: Rectangle stie ID-ul formei prin protected id
+    // INVALID: ShapeManager NU poate accesa id direct
     unsigned int id;
-
-    // Numele formei (alocat dinamic)
+    
+    // VALID: Diamond poate modifica name in operator=
+    // INVALID: main() NU poate accesa name direct
     char *name;
 
-    // Calculeaza centrul formei
+    // VALID: Rectangle poate apela getCentre() la initializare
+    // INVALID: Codul extern NU poate apela getCentre()
     Point getCentre() const;
 
+// PUBLIC: Accesibil din oriunde
 public:
-    // Face o forma default rosie fara varfuri
     Shape();
-
-    // Face o forma cu toate proprietatile specificate
     Shape(unsigned int num, Point *vertices, Color color, const char *name);
-
-    // Face o forma rosie cu nume default
     Shape(unsigned int num, Point *vertices);
-
-    // Face o forma rosie cu nume specificat
     Shape(unsigned int num, Point *vertices, const char *name);
 
     // Face o forma cu toate proprietatile si o muta in (centerX, centerY)

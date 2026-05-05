@@ -10,6 +10,7 @@ unsigned int Shape::newestId = 0;
 
 Shape::Shape() : id(++newestId), color(Color::RED), numVertices(0)
 {
+    std::cout << "  [1] Shape::Constructor()" << std::endl;
     vertices = nullptr;
     name = new char[9];
     strcpy(name, "Polygone");
@@ -96,12 +97,14 @@ Shape::Shape(unsigned int num, Point *vertices, const char *name, float centerX,
 
 Shape::~Shape()
 {
+    std::cout << "  [4] Shape::Destructor()" << std::endl;
     delete[] vertices;
     delete[] name;
 }
 
 Shape::Shape(const Shape &other) : id(other.id)
 {
+    std::cout << "  [1] Shape::CopyConstructor()" << std::endl;
     if (other.numVertices > 0 && other.vertices)
     {
         numVertices = other.numVertices;
