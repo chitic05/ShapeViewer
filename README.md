@@ -43,9 +43,19 @@ cmake --build build --config Release
 
 ## Run
 
+### Linux
 ```bash
 ./build/ShapeViewer
 ```
+### Windows
+```bash
+.\build\Release\ShapeViewer.exe
+```
+
+```bash
+.\build\Debug\ShapeViewer.exe
+```
+
 
 ## Application Structure
 
