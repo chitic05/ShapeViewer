@@ -1,18 +1,15 @@
 #pragma once
 #include "Shape/shape.h"
+#include "Shape/shapeRepository.h"
+#include <stdexcept>
 
 class ShapeManager
 {
 // PRIVATE: Doar ShapeManager poate accesa
 private:
     // VALID: ShapeManager::operator[] poate accesa shapes
-    // INVALID: Codul extern NU poate accesa shapes direct
-    // INVALID: PrintPage NU poate modifica shapes array
-    Shape** shapes;
-    
-    // VALID: ShapeManager::getCount() citeste shapesNumber
-    // INVALID: Extern code NU poate citi shapesNumber direct
-    int shapesNumber;
+    // ShapeRepository inlocuieste std::vector direct
+    ShapeRepository repository;
     
     // VALID: ShapeManager constructor initializeaza name
     // INVALID: Extern code NU poate modifica name direct
@@ -85,6 +82,10 @@ public:
 
     // Returneaza numele managerului
     const char *getName() const;
+
+    // Returneaza referinta la repository (pentru acces direct la STL containers si algoritmi)
+    ShapeRepository& getRepository();
+    const ShapeRepository& getRepository() const;
 
     // Filter methods using dynamic_cast for type-safe filtering
     void printAllRectangles() const;

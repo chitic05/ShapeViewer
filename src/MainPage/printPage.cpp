@@ -11,6 +11,7 @@
 #include <string>
 #include <typeinfo>
 #include <cstdlib>
+#include <algorithm>
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
@@ -43,13 +44,14 @@ void PrintPage::Load()
     }
     else
     {
-        // std::cout << *sm << "\n";
-
         std::cout << "\n--- Filter Options ---\n";
         std::cout << "1. View all shapes\n";
         std::cout << "2. View Rectangle shapes only\n";
         std::cout << "3. View Diamond shapes only\n";
         std::cout << "4. View Square shapes only\n";
+        std::cout << "5. View shapes by color\n";
+        std::cout << "6. View shapes sorted by perimeter\n";
+        std::cout << "7. Find shape by ID\n";
         std::cout << "0. Go back\n";
         std::cout << "Enter your choice: ";
         std::string choice;
@@ -61,60 +63,85 @@ void PrintPage::Load()
             return;
         }
 
-        // Clear terminal for cleaner display
-        system("clear");
+        clearTerminal();
 
-        // Display filtered shapes
-        if (choice == "1" || choice == "2" || choice == "3" || choice == "4")
+        if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5" || choice == "6" || choice == "7")
         {
             std::cout << "\n========== Filtered Shapes ==========\n";
             std::cout << "    ID | Name      | Color      | Vertices | Coordinates\n";
             std::cout << "----------------------------------------\n";
 
+            auto& allShapes = sm->getRepository().getAllShapes();
             int matchCount = 0;
-            for (int i = 0; i < sm->getCount(); ++i)
+
+            if (choice == "1")
             {
-                bool matches = false;
+                for (const auto& shape : allShapes) {
+                    matchCount++;
+                    std::cout << *shape << "\n";
+                }
+            }
+            else if (choice == "2" || choice == "3" || choice == "4")
+            {
+                for (const auto& shape : allShapes)
+                {
+                    bool matches = false;
+                    if (choice == "2")
+                        matches = (dynamic_cast<Rectangle*>(shape) != nullptr);
+                    else if (choice == "3")
+                        matches = (dynamic_cast<Diamond*>(shape) != nullptr);
+                    else if (choice == "4")
+                        matches = (dynamic_cast<Square*>(shape) != nullptr);
 
-                if (choice == "1")
-                {
-                    matches = true;
+                    if (matches)
+                    {
+                        matchCount++;
+                        std::cout << *shape << "\n";
+                    }
                 }
-                else if (choice == "2")
-                {
-                    //dynamic_cast
-                    Rectangle* rect = dynamic_cast<Rectangle*>((*sm)[i]);
-                    matches = (rect != nullptr);
-                    
-                    /*typeid way
-                    matches = (typeid(*(*sm)[i]) == typeid(Rectangle));
-                    */
-                }
-                else if (choice == "3")
-                {
-                    //dynamic_cast
-                    Diamond* dia = dynamic_cast<Diamond*>((*sm)[i]);
-                    matches = (dia != nullptr);
-                    
-                    /*typeid way
-                    matches = (typeid(*(*sm)[i]) == typeid(Diamond));
-                    */
-                }
-                else if (choice == "4")
-                {
-                    //dynamic_cast
-                    Square* sq = dynamic_cast<Square*>((*sm)[i]);
-                    matches = (sq != nullptr);
-                    
-                    /*typeid way
-                    matches = (typeid(*(*sm)[i]) == typeid(Square));
-                    */
-                }
-
-                if (matches)
+            }
+            else if (choice == "5")
+            {
+                std::cout << "Enter color (RED/GREEN/BLUE): ";
+                std::string colorStr;
+                std::getline(std::cin, colorStr);
+                
+                Color filterColor = Color::RED;
+                if (colorStr == "GREEN") filterColor = Color::GREEN;
+                else if (colorStr == "BLUE") filterColor = Color::BLUE;
+                
+                auto colorShapes = sm->getRepository().findShapesByColor(filterColor);
+                for (const auto& shape : colorShapes)
                 {
                     matchCount++;
-                    std::cout << *(*sm)[i] << "\n";
+                    std::cout << *shape << "\n";
+                }
+            }
+            else if (choice == "6")
+            {
+                auto sorted = allShapes;
+                std::sort(sorted.begin(), sorted.end(),
+                         [](Shape* a, Shape* b) { return a->getPerimeter() < b->getPerimeter(); });
+                
+                for (const auto& shape : sorted)
+                {
+                    matchCount++;
+                    std::cout << *shape << "\n";
+                }
+            }
+            else if (choice == "7")
+            {
+                std::cout << "Enter shape ID: ";
+                std::string idStr;
+                std::getline(std::cin, idStr);
+                
+                try {
+                    unsigned int id = std::stoi(idStr);
+                    auto shape = sm->getRepository().findShapeById(id);
+                    matchCount++;
+                    std::cout << *shape << "\n";
+                } catch (...) {
+                    std::cout << "Invalid ID or shape not found\n";
                 }
             }
 

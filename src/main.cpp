@@ -1,5 +1,6 @@
 #include "Page/pageManager.h"
 #include "Shape/shapeManager.h"
+#include "Shape/shapeRepository.h"
 #include "customExceptions.h"
 #include <iostream>
 #include <cmath>
@@ -127,6 +128,11 @@ int main()
     try
     {
         demonstrateExceptionHandling();
+
+        // CERINTA 3: STL Containers & Algorithms Demo
+        ShapeRepository repo;
+        repo.demonstrateCRUD();
+        repo.demonstrateAlgorithms();
 
         // Continuă cu aplicația normală
         ShapeManager *sm = new ShapeManager("My Shapes");

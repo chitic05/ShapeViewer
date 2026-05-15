@@ -8,6 +8,7 @@
 #include "terminal.hpp"
 #include <string>
 #include <cstdlib>
+#include <algorithm>
 
 DeletePage::DeletePage() : Page()
 {
@@ -35,13 +36,14 @@ void DeletePage::Load()
     }
     else
     {
-        // std::cout << *sm << "\n";
-
         std::cout << "\n--- Filter Options ---\n";
         std::cout << "1. Delete from all shapes\n";
         std::cout << "2. Delete Rectangle only\n";
         std::cout << "3. Delete Diamond only\n";
         std::cout << "4. Delete Square only\n";
+        std::cout << "5. Delete shapes by color\n";
+        std::cout << "6. Delete shapes sorted by perimeter\n";
+        std::cout << "7. Find shape by ID\n";
         std::cout << "0. Go back\n";
         std::cout << "Enter your choice: ";
         std::string choice;
@@ -53,37 +55,91 @@ void DeletePage::Load()
             return;
         }
 
-        // Clear terminal for cleaner display
-    clearTerminal();
-        // Display filtered shapes and ask for ID
-        if (choice == "1" || choice == "2" || choice == "3" || choice == "4")
+        clearTerminal();
+
+        if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5" || choice == "6" || choice == "7")
         {
             std::cout << "\n========== Filtered Shapes ==========\n";
             std::cout << "    ID | Name      | Color      | Vertices | Coordinates\n";
             std::cout << "----------------------------------------\n";
 
+            auto& allShapes = sm->getRepository().getAllShapes();
+            int matchCount = 0;
+
             if (choice == "1")
             {
-                // Display all shapes
-                for (int i = 0; i < sm->getCount(); ++i)
-                {
-                    std::cout << *(*sm)[i] << "\n";
+                for (const auto& shape : allShapes) {
+                    matchCount++;
+                    std::cout << *shape << "\n";
                 }
             }
-            else if (choice == "2")
+            else if (choice == "2" || choice == "3" || choice == "4")
             {
-                // Display only Rectangles using dynamic_cast
-                sm->printAllRectangles();
+                for (const auto& shape : allShapes)
+                {
+                    bool matches = false;
+                    if (choice == "2")
+                        matches = (dynamic_cast<Rectangle*>(shape) != nullptr);
+                    else if (choice == "3")
+                        matches = (dynamic_cast<Diamond*>(shape) != nullptr);
+                    else if (choice == "4")
+                        matches = (dynamic_cast<Square*>(shape) != nullptr);
+
+                    if (matches)
+                    {
+                        matchCount++;
+                        std::cout << *shape << "\n";
+                    }
+                }
             }
-            else if (choice == "3")
+            else if (choice == "5")
             {
-                // Display only Diamonds using dynamic_cast
-                sm->printAllDiamonds();
+                std::cout << "Enter color (RED/GREEN/BLUE): ";
+                std::string colorStr;
+                std::getline(std::cin, colorStr);
+                
+                Color filterColor = Color::RED;
+                if (colorStr == "GREEN") filterColor = Color::GREEN;
+                else if (colorStr == "BLUE") filterColor = Color::BLUE;
+                
+                auto colorShapes = sm->getRepository().findShapesByColor(filterColor);
+                for (const auto& shape : colorShapes)
+                {
+                    matchCount++;
+                    std::cout << *shape << "\n";
+                }
             }
-            else if (choice == "4")
+            else if (choice == "6")
             {
-                // Display only Squares using dynamic_cast
-                sm->printAllSquares();
+                auto sorted = allShapes;
+                std::sort(sorted.begin(), sorted.end(),
+                         [](Shape* a, Shape* b) { return a->getPerimeter() < b->getPerimeter(); });
+                
+                for (const auto& shape : sorted)
+                {
+                    matchCount++;
+                    std::cout << *shape << "\n";
+                }
+            }
+            else if (choice == "7")
+            {
+                std::cout << "Enter shape ID: ";
+                std::string idStr;
+                std::getline(std::cin, idStr);
+                
+                try {
+                    unsigned int id = std::stoi(idStr);
+                    auto shape = sm->getRepository().findShapeById(id);
+                    matchCount++;
+                    std::cout << *shape << "\n";
+                } catch (...) {
+                    std::cout << "Invalid ID or shape not found\n";
+                }
+            }
+
+            if (matchCount == 0)
+            {
+                std::cout << "  (No shapes matching the filter)\n";
             }
             std::cout << "====================================\n";
         }
@@ -108,7 +164,7 @@ void DeletePage::Load()
             try
             {
                 unsigned int id = std::stoi(line);
-                *sm -= id; // stergem forma cu ID-ul dat
+                *sm -= id;
                 std::cout << "Shape deleted successfully!\n";
             }
             catch (const std::exception &e)
