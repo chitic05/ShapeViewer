@@ -5,11 +5,14 @@
 #include "MainPage/modifyPage.h"
 #include "MainPage/printPage.h"
 #include "Shape/shapeManager.h"
+// Adaugă header-ul fabricii tale abstracte aici dacă nu e inclus în altă parte
+// #include "Shape/shapeFactory.h" 
 #include "terminal.hpp"
 #include <stdexcept>
 
+// Constructorul - inițializează pointerii pe nullptr și încarcă paginile în map
 PageManager::PageManager()
-    : shapeManager(nullptr), currentPage(nullptr)
+    : shapeManager(nullptr), shapeFactory(nullptr), currentPage(nullptr)
 {
     allPages["mainPage"] = std::make_unique<MainPage>();
     allPages["addPage"] = std::make_unique<AddPage>();
@@ -18,6 +21,7 @@ PageManager::PageManager()
     allPages["modifyPage"] = std::make_unique<ModifyPage>();
 }
 
+// Meyers Singleton - instanța unică statică locală
 PageManager &PageManager::getInstance()
 {
     static PageManager instance;
@@ -32,6 +36,15 @@ void PageManager::setSM(ShapeManager *sm)
 ShapeManager *&PageManager::getSM()
 {
     return shapeManager;
+}
+
+void PageManager::setShapeFactory(std::unique_ptr<IShapeFactory> factory)
+{
+    shapeFactory = std::move(factory); 
+    auto addPage = dynamic_cast<AddPage*>(getPage("addPage"));
+    if(addPage){
+        addPage->setFactory(shapeFactory.get());
+    }
 }
 
 void PageManager::changePage(Page *nextPage)

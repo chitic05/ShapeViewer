@@ -1,41 +1,43 @@
 #pragma once
-#include "Shape/shapes/square.h"
-//Produse Abstracte
-class Patrulater : virtual public Shape{
+#include "Shape/shape.h"
 
+class Patrulater : virtual public Shape
+{
+public:
+    virtual ~Patrulater() = default;
 };
 
-class Triangle : virtual public Shape{
-
+class Triangle : virtual public Shape
+{
+public:
+    virtual ~Triangle() = default;
 };
 
-//Proudse concrete Dreptunghi, Romb, Patrat, Triunghi drept, echilateral si nu stiu care i a treia varianta pentru romb
-
-//Abstract Factory
-class ShapeFactory{
-    public:
-        virtual Patrulater* createPatrulater() = 0;
-        virtual Triangle* createTriangle() = 0;
+class IShapeFactory
+{
+public:
+    virtual ~IShapeFactory() = default;
+    virtual Patrulater *createPatrulater() = 0;
+    virtual Triangle *createTriangle() = 0;
 };
 
-//concrete Factory
-class FormeDrepteFactory : public ShapeFactory{
-    public:
-        Patrulater* createPatrulater() override {return new Rectangle();};
-        //Patrulater* createTriangle() override {return new Rectangle();};
+class PerpendicularFactory : public IShapeFactory
+{
+public:
+    Patrulater *createPatrulater() override;
+    Triangle *createTriangle() override;
 };
 
-class FormeEgaleFactory : public ShapeFactory{
-    public:
-        Patrulater* createPatrulater() override {return new Square();};
-        //Patrulater* createTriangle() override {return new Rectangle();};
+class EqualFactory : public IShapeFactory
+{
+public:
+    Patrulater *createPatrulater() override;
+    Triangle *createTriangle() override;
 };
 
-
-
-//SA RENUNT LA ROMB IN MENIURI
-class RombFactory : ShapeFactory{
-    public:
-        Patrulater* createPatrulater() override {return new Diamond;};
-        //Patrulater* createTriangle() override {return new Rectangle();};
+class RombFactory : public IShapeFactory
+{
+public:
+    Patrulater *createPatrulater() override;
+    Triangle *createTriangle() override;
 };

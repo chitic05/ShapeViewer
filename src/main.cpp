@@ -1,3 +1,5 @@
+#include "Factory/abstractFactory.h"
+#include <memory>
 #include "Page/pageManager.h"
 #include "Shape/shapeManager.h"
 #include "customExceptions.h"
@@ -128,9 +130,15 @@ int main()
     {
         demonstrateExceptionHandling();
 
+        // CERINTA 7: Abstract Factory (schimbare familie dintr-o singura linie)
+        auto factory = std::make_unique<PerpendicularFactory>();
+        // auto factory = std::make_unique<EqualFactory>();
+        // auto factory = std::make_unique<RombFactory>();
+
         // Continuă cu aplicația normală
         ShapeManager *sm = new ShapeManager("My Shapes");
         PageManager::getInstance().setSM(sm);
+        PageManager::getInstance().setShapeFactory(std::move(factory));
 
         // PageManager pm;            // Error: constructor is private
         // PageManager pm2(pm);       // Error: copy constructor deleted

@@ -6,12 +6,16 @@
 #include "Shape/shapes/rectangle.h"
 #include "Shape/shapes/diamond.h"
 #include "Shape/shapes/square.h"
+#include "Shape/shapes/rightTriangle.h"
+#include "Shape/shapes/equilateralTriangle.h"
+#include "Factory/abstractFactory.h"
 #include "Shape/shapeManager.h"
 #include "terminal.hpp"
 #include <string>
 #include <typeinfo>
 #include <cstdlib>
 #include <algorithm>
+#include <functional>
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
@@ -46,12 +50,11 @@ void PrintPage::Load()
     {
         std::cout << "\n--- Filter Options ---\n";
         std::cout << "1. View all shapes\n";
-        std::cout << "2. View Rectangle shapes only\n";
-        std::cout << "3. View Diamond shapes only\n";
-        std::cout << "4. View Square shapes only\n";
-        std::cout << "5. View shapes by color\n";
-        std::cout << "6. View shapes sorted by perimeter\n";
-        std::cout << "7. View shapes sorted by name\n";
+        std::cout << "2. View quadrilaterals\n";
+        std::cout << "3. View triangles\n";
+        std::cout << "4. View shapes by color\n";
+        std::cout << "5. View shapes sorted by perimeter\n";
+        std::cout << "6. View shapes sorted by name\n";
         std::cout << "0. Go back\n";
         std::cout << "Enter your choice: ";
         std::string choice;
@@ -65,7 +68,7 @@ void PrintPage::Load()
 
         clearTerminal();
 
-        if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5" || choice == "6" || choice == "7")
+        if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5" || choice == "6")
         {
             std::cout << "\n========== Filtered Shapes ==========\n";
             std::cout << "    ID | Name      | Color      | Vertices | Coordinates\n";
@@ -73,6 +76,7 @@ void PrintPage::Load()
 
             auto& allShapes = sm->getRepository().getAllShapes();
             int matchCount = 0;
+            std::function<bool(Shape*)> filter;
 
             if (choice == "1")
             {
@@ -81,26 +85,88 @@ void PrintPage::Load()
                     std::cout << *shape << "\n";
                 }
             }
-            else if (choice == "2" || choice == "3" || choice == "4")
+            else if (choice == "2")
             {
+                std::cout << "\n--- Quadrilateral Options ---\n";
+                std::cout << "1. All quadrilaterals\n";
+                std::cout << "2. Rectangle only\n";
+                std::cout << "3. Diamond only\n";
+                std::cout << "4. Square only\n";
+                std::cout << "0. Go back\n";
+                std::cout << "Enter your choice: ";
+                std::string subChoice;
+                std::getline(std::cin, subChoice);
+
+                if (subChoice == "0" || subChoice == "")
+                {
+                    PageManager::getInstance().changePage(this->previous);
+                    return;
+                }
+
+                if (subChoice == "1")
+                    filter = [](Shape* s) { return dynamic_cast<Patrulater*>(s) != nullptr; };
+                else if (subChoice == "2")
+                    filter = [](Shape* s) { return dynamic_cast<Rectangle*>(s) != nullptr; };
+                else if (subChoice == "3")
+                    filter = [](Shape* s) { return dynamic_cast<Diamond*>(s) != nullptr; };
+                else if (subChoice == "4")
+                    filter = [](Shape* s) { return dynamic_cast<Square*>(s) != nullptr; };
+                else
+                {
+                    std::cerr << "Invalid choice!\n";
+                    PageManager::getInstance().changePage(this->previous);
+                    return;
+                }
+
                 for (const auto& shape : allShapes)
                 {
-                    bool matches = false;
-                    if (choice == "2")
-                        matches = (dynamic_cast<Rectangle*>(shape) != nullptr);
-                    else if (choice == "3")
-                        matches = (dynamic_cast<Diamond*>(shape) != nullptr);
-                    else if (choice == "4")
-                        matches = (dynamic_cast<Square*>(shape) != nullptr);
-
-                    if (matches)
+                    if (filter(shape))
                     {
                         matchCount++;
                         std::cout << *shape << "\n";
                     }
                 }
             }
-            else if (choice == "5")
+            else if (choice == "3")
+            {
+                std::cout << "\n--- Triangle Options ---\n";
+                std::cout << "1. All triangles\n";
+                std::cout << "2. Right triangle only\n";
+                std::cout << "3. Equilateral triangle only\n";
+                std::cout << "0. Go back\n";
+                std::cout << "Enter your choice: ";
+                std::string subChoice;
+                std::getline(std::cin, subChoice);
+
+                if (subChoice == "0" || subChoice == "")
+                {
+                    PageManager::getInstance().changePage(this->previous);
+                    return;
+                }
+
+                if (subChoice == "1")
+                    filter = [](Shape* s) { return dynamic_cast<Triangle*>(s) != nullptr; };
+                else if (subChoice == "2")
+                    filter = [](Shape* s) { return dynamic_cast<RightTriangle*>(s) != nullptr; };
+                else if (subChoice == "3")
+                    filter = [](Shape* s) { return dynamic_cast<EquilateralTriangle*>(s) != nullptr; };
+                else
+                {
+                    std::cerr << "Invalid choice!\n";
+                    PageManager::getInstance().changePage(this->previous);
+                    return;
+                }
+
+                for (const auto& shape : allShapes)
+                {
+                    if (filter(shape))
+                    {
+                        matchCount++;
+                        std::cout << *shape << "\n";
+                    }
+                }
+            }
+            else if (choice == "4")
             {
                 std::cout << "Enter color (RED/GREEN/BLUE): ";
                 std::string colorStr;
@@ -117,7 +183,7 @@ void PrintPage::Load()
                     std::cout << *shape << "\n";
                 }
             }
-            else if (choice == "6")
+            else if (choice == "5")
             {
                 auto sorted = allShapes;
                 std::sort(sorted.begin(), sorted.end(),
@@ -129,7 +195,7 @@ void PrintPage::Load()
                     std::cout << *shape << "\n";
                 }
             }
-            else if (choice == "7")
+            else if (choice == "6")
             {
                 auto sorted = allShapes;
                 std::sort(sorted.begin(), sorted.end(),

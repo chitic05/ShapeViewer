@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 class ShapeManager;
+class IShapeFactory;
 
 class PageManager
 {
@@ -25,10 +26,14 @@ public:
 
     ShapeManager *&getSM();
 
+    void setShapeFactory(std::unique_ptr<IShapeFactory> factory);
+
 private:
     PageManager();
 
     ShapeManager *shapeManager;
+
+    std::unique_ptr<IShapeFactory> shapeFactory;
 
     std::unordered_map<std::string, std::unique_ptr<Page>> allPages;
 

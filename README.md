@@ -158,6 +158,7 @@ cmake --build build --config Release
 - **Virtual Inheritance** - Resolving diamond inheritance pattern in Shape hierarchy
 - **IObject Interface** - Unique IDs generated via `IObject` base
 - **Singleton (Meyers)** - `PageManager` centralizes page navigation and state
+- **Abstract Factory** - `IShapeFactory` with three concrete families and two abstract products (`Patrulater`, `Triangle`)
 
 ## STL Usage
 

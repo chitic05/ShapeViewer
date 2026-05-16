@@ -1,13 +1,12 @@
 #include "MainPage/addPage.h"
+#include "Factory/abstractFactory.h"
 #include "Page/pageManager.h"
 #include "Shape/shape.h"
-#include "Shape/shapes/rectangle.h"
-#include "Shape/shapes/diamond.h"
-#include "Shape/shapes/square.h"
 #include "Shape/shapeManager.h"
 #include "terminal.hpp"
+#include <memory>
 
-AddPage::AddPage() : Page()
+AddPage::AddPage() : Page(), factory(nullptr)
 {
     this->pageKey = "addPage";
     this->pageName = "Add Shape Page";
@@ -19,6 +18,11 @@ AddPage::AddPage() : Page()
 void AddPage::initNeighbourPages()
 {
     this->previous = PageManager::getInstance().getPage("mainPage");
+}
+
+void AddPage::setFactory(IShapeFactory *shapeFactory)
+{
+    factory = shapeFactory;
 }
 
 void AddPage::Load()
@@ -42,21 +46,6 @@ void AddPage::Load()
     }
     else
     {
-        // Shape type selection menu
-        std::cout << "\n--- Select Shape Type ---\n";
-        std::cout << "1. Rectangle\n";
-        std::cout << "2. Diamond\n";
-        std::cout << "3. Square\n";
-        std::cout << "0. Cancel\n";
-        std::cout << "Enter your choice: ";
-        std::getline(std::cin, line);
-
-        if (line == "0" || line == "")
-        {
-            PageManager::getInstance().changePage(this->previous);
-            return;
-        }
-
         ShapeManager *sm = PageManager::getInstance().getSM();
         if (!sm)
         {
@@ -67,27 +56,68 @@ void AddPage::Load()
             return;
         }
 
+        std::cout << "\n--- Select Shape Family ---\n";
+        std::cout << "1. Perpendicular (Rectangle / Right Triangle)\n";
+        std::cout << "2. Equal (Square / Equilateral Triangle)\n";
+        std::cout << "3. Romb (Diamond / Equilateral Triangle)\n";
+        std::cout << "0. Cancel\n";
+        std::cout << "Enter your choice: ";
+        std::getline(std::cin, line);
+
+        if (line == "0" || line == "")
+        {
+            PageManager::getInstance().changePage(this->previous);
+            return;
+        }
+
+        if (line == "1")
+            PageManager::getInstance().setShapeFactory(std::make_unique<PerpendicularFactory>());
+        else if (line == "2")
+            PageManager::getInstance().setShapeFactory(std::make_unique<EqualFactory>());
+        else if (line == "3")
+            PageManager::getInstance().setShapeFactory(std::make_unique<RombFactory>());
+        else
+        {
+            std::cerr << "Invalid choice!\n";
+            PageManager::getInstance().changePage(this->previous);
+            return;
+        }
+
+        if (!factory)
+        {
+            std::cerr << "ShapeFactory is not initialized!\n";
+            std::cout << "--Press Enter--\n";
+            std::getline(std::cin, line);
+            PageManager::getInstance().changePage(this->previous);
+            return;
+        }
+
+        std::cout << "\n--- Select Shape Type ---\n";
+        std::cout << "1. Quadrilateral\n";
+        std::cout << "2. Triangle\n";
+        std::cout << "0. Cancel\n";
+        std::cout << "Enter your choice: ";
+        std::getline(std::cin, line);
+
+        if (line == "0" || line == "")
+        {
+            PageManager::getInstance().changePage(this->previous);
+            return;
+        }
+
         Shape *newShape = nullptr;
 
         try
         {
             if (line == "1")
             {
-                // Rectangle - use static create()
-                newShape = Rectangle::create();
-                std::cout << "Rectangle added successfully!\n";
+                newShape = factory->createPatrulater();
+                std::cout << "Quadrilateral added successfully!\n";
             }
             else if (line == "2")
             {
-                // Diamond - use static create()
-                newShape = Diamond::create();
-                std::cout << "Diamond added successfully!\n";
-            }
-            else if (line == "3")
-            {
-                // Square - use static create()
-                newShape = Square::create();
-                std::cout << "Square added successfully!\n";
+                newShape = factory->createTriangle();
+                std::cout << "Triangle added successfully!\n";
             }
             else
             {
@@ -96,7 +126,6 @@ void AddPage::Load()
                 return;
             }
 
-            // Add the created shape to ShapeManager (takes ownership of pointer)
             if (newShape)
             {
                 *sm += newShape;
