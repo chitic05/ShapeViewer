@@ -23,7 +23,7 @@ inline void keyError(std::string &line, std::string &pageKey)
 
     try
     {
-        PageManager::changePage(PageManager::getPage(pageKey));
+        PageManager::getInstance().changePage(PageManager::getInstance().getPage(pageKey));
     }
     catch (const std::exception &e)
     {
@@ -40,7 +40,7 @@ inline void NaNError(std::string &line, std::string &pageKey)
 
     try
     {
-        PageManager::changePage(PageManager::getPage(pageKey));
+        PageManager::getInstance().changePage(PageManager::getInstance().getPage(pageKey));
     }
     catch (const std::exception &e)
     {

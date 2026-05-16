@@ -20,7 +20,7 @@ DeletePage::DeletePage() : Page()
 
 void DeletePage::initNeighbourPages()
 {
-    this->previous = PageManager::getPage("mainPage");
+    this->previous = PageManager::getInstance().getPage("mainPage");
 }
 
 void DeletePage::Load()
@@ -28,7 +28,7 @@ void DeletePage::Load()
     initNeighbourPages();
     std::string line;
     std::cout << this->text << std::flush;
-    ShapeManager *sm = PageManager::getSM();
+    ShapeManager *sm = PageManager::getInstance().getSM();
 
     if (!sm || sm->getCount() == 0)
     {
@@ -51,7 +51,7 @@ void DeletePage::Load()
 
         if (choice == "0" || choice == "")
         {
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
             return;
         }
 
@@ -148,7 +148,7 @@ void DeletePage::Load()
         {
             try
             {
-                PageManager::changePage(this->previous);
+                PageManager::getInstance().changePage(this->previous);
             }
             catch (const std::exception &e)
             {
@@ -176,7 +176,7 @@ void DeletePage::Load()
     std::getline(std::cin, line);
     try
     {
-        PageManager::changePage(this->previous);
+        PageManager::getInstance().changePage(this->previous);
     }
     catch (const std::exception &e)
     {

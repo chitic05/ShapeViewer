@@ -130,9 +130,12 @@ int main()
 
         // Continuă cu aplicația normală
         ShapeManager *sm = new ShapeManager("My Shapes");
-        PageManager::setSM(sm);
+        PageManager::getInstance().setSM(sm);
 
-        PageManager::changePage(PageManager::getPage("mainPage"));
+        // PageManager pm;            // Error: constructor is private
+        // PageManager pm2(pm);       // Error: copy constructor deleted
+
+        PageManager::getInstance().changePage(PageManager::getInstance().getPage("mainPage"));
 
         delete sm;
     }

@@ -1,8 +1,9 @@
 #pragma once
 #include "../shape.h"
+#include "Factory/abstractFactory.h"
 
 // IS-A: Rectangle extends Shape (inheritance hierarchy) - VIRTUAL for diamond inheritance
-class Rectangle : virtual public Shape
+class Rectangle : virtual public Patrulater
 {
 protected:
     float width;

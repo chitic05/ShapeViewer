@@ -49,8 +49,8 @@ ShapeManager &ShapeManager::operator=(const ShapeManager &other)
 
 ShapeManager::~ShapeManager()
 {
-    if (PageManager::getSM() == this)
-        PageManager::getSM() = nullptr;
+    if (PageManager::getInstance().getSM() == this)
+        PageManager::getInstance().getSM() = nullptr;
 }
 
 Shape *ShapeManager::operator[](unsigned int index)

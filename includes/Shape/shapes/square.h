@@ -2,6 +2,7 @@
 #include "rectangle.h"
 #include "diamond.h"
 
+
 // DIAMOND INHERITANCE: Square extends both Rectangle and Diamond with virtual inheritance
 // This solves the diamond problem: both Rectangle and Diamond inherit from Shape
 // With virtual inheritance, Shape is constructed only once

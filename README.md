@@ -111,6 +111,8 @@ cmake --build build --config Release
   - Filtering by type using `dynamic_cast` and `typeid`
 
 - **PageManager** - Controls navigation between pages
+  - Implemented as a Meyers Singleton (static local in `getInstance()`)
+  - Copy and move operations are deleted to enforce a single instance
 
 - **Point** - 2D point for coordinates
   - Supports arithmetic operations (+, -)
@@ -155,6 +157,7 @@ cmake --build build --config Release
 - **final Keyword** - Preventing further inheritance on concrete classes
 - **Virtual Inheritance** - Resolving diamond inheritance pattern in Shape hierarchy
 - **IObject Interface** - Unique IDs generated via `IObject` base
+- **Singleton (Meyers)** - `PageManager` centralizes page navigation and state
 
 ## STL Usage
 

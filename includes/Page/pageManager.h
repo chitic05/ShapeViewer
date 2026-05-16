@@ -10,18 +10,27 @@ class ShapeManager;
 class PageManager
 {
 public:
-    static void changePage(Page *nextPage);
+    static PageManager &getInstance();
 
-    static Page *getPage(const std::string &pageKey);
+    PageManager(const PageManager &) = delete;
+    PageManager &operator=(const PageManager &) = delete;
+    PageManager(PageManager &&) = delete;
+    PageManager &operator=(PageManager &&) = delete;
 
-    static void setSM(ShapeManager *sm);
+    void changePage(Page *nextPage);
 
-    static ShapeManager *&getSM();
+    Page *getPage(const std::string &pageKey);
+
+    void setSM(ShapeManager *sm);
+
+    ShapeManager *&getSM();
 
 private:
-    static ShapeManager *shapeManager;
+    PageManager();
 
-    static std::unordered_map<std::string, std::unique_ptr<Page>> allPages;
+    ShapeManager *shapeManager;
 
-    static Page *currentPage;
+    std::unordered_map<std::string, std::unique_ptr<Page>> allPages;
+
+    Page *currentPage;
 };

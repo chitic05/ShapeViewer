@@ -1,9 +1,10 @@
 #pragma once
 #include "../shape.h"
 #include <cmath>
+#include "Factory/abstractFactory.h"
 
 // IS-A: Diamond extends Shape (inheritance hierarchy) - VIRTUAL for diamond inheritance
-class Diamond : virtual public Shape
+class Diamond : virtual public Patrulater
 {
 protected:
     float diagonal1;  // First diagonal

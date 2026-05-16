@@ -8,28 +8,30 @@
 #include "terminal.hpp"
 #include <stdexcept>
 
-ShapeManager *PageManager::shapeManager = nullptr;
-Page *PageManager::currentPage = nullptr;
-
-std::unordered_map<std::string, std::unique_ptr<Page>> PageManager::allPages = []()
+PageManager::PageManager()
+    : shapeManager(nullptr), currentPage(nullptr)
 {
-    std::unordered_map<std::string, std::unique_ptr<Page>> pages;
-    pages["mainPage"] = std::make_unique<MainPage>();
-    pages["addPage"] = std::make_unique<AddPage>();
-    pages["deletePage"] = std::make_unique<DeletePage>();
-    pages["printPage"] = std::make_unique<PrintPage>();
-    pages["modifyPage"] = std::make_unique<ModifyPage>();
-    return pages;
-}();
+    allPages["mainPage"] = std::make_unique<MainPage>();
+    allPages["addPage"] = std::make_unique<AddPage>();
+    allPages["deletePage"] = std::make_unique<DeletePage>();
+    allPages["printPage"] = std::make_unique<PrintPage>();
+    allPages["modifyPage"] = std::make_unique<ModifyPage>();
+}
+
+PageManager &PageManager::getInstance()
+{
+    static PageManager instance;
+    return instance;
+}
 
 void PageManager::setSM(ShapeManager *sm)
 {
-    PageManager::shapeManager = sm;
+    shapeManager = sm;
 }
 
 ShapeManager *&PageManager::getSM()
 {
-    return PageManager::shapeManager;
+    return shapeManager;
 }
 
 void PageManager::changePage(Page *nextPage)

@@ -20,7 +20,7 @@ ModifyPage::ModifyPage() : Page()
 
 void ModifyPage::initNeighbourPages()
 {
-    this->previous = PageManager::getPage("mainPage");
+    this->previous = PageManager::getInstance().getPage("mainPage");
 }
 
 void ModifyPage::Load()
@@ -28,14 +28,14 @@ void ModifyPage::Load()
     initNeighbourPages();
     std::string line;
     std::cout << this->text << std::flush;
-    ShapeManager *sm = PageManager::getSM();
+    ShapeManager *sm = PageManager::getInstance().getSM();
 
     if (!sm || sm->getCount() == 0)
     {
         std::cout << "ShapeManager is empty. There are no shapes to modify.\n";
         std::cout << "--Press Enter--\n";
         std::getline(std::cin, line);
-        PageManager::changePage(this->previous);
+        PageManager::getInstance().changePage(this->previous);
         return;
     }
 
@@ -54,7 +54,7 @@ void ModifyPage::Load()
 
     if (choice == "0" || choice == "")
     {
-        PageManager::changePage(this->previous);
+        PageManager::getInstance().changePage(this->previous);
         return;
     }
 
@@ -155,7 +155,7 @@ void ModifyPage::Load()
 
     if (line.length() == 1 && tolower(line[0]) == 'b')
     {
-        PageManager::changePage(this->previous);
+        PageManager::getInstance().changePage(this->previous);
         return;
     }
 
@@ -165,7 +165,7 @@ void ModifyPage::Load()
         std::cout << "--Press Enter--\n";
 
         std::getline(std::cin, line);
-        PageManager::changePage(this->previous);
+        PageManager::getInstance().changePage(this->previous);
         return;
     }
 
@@ -180,7 +180,7 @@ void ModifyPage::Load()
     {
         std::cerr << "Shape with ID " << shapeId << " was not found!\n";
         std::getline(std::cin, line);
-        PageManager::changePage(this->previous);
+        PageManager::getInstance().changePage(this->previous);
         return;
     }
 
@@ -193,7 +193,7 @@ void ModifyPage::Load()
 
     if (line.length() == 1 && tolower(line[0]) == 'b')
     {
-        PageManager::changePage(this->previous);
+        PageManager::getInstance().changePage(this->previous);
         return;
     }
 
@@ -202,7 +202,7 @@ void ModifyPage::Load()
         std::cerr << "Invalid option!\n";
         std::cout << "--Press Enter--\n";
         std::getline(std::cin, line);
-        PageManager::changePage(this->previous);
+        PageManager::getInstance().changePage(this->previous);
         return;
     }
 
@@ -270,5 +270,5 @@ void ModifyPage::Load()
     std::cout << *sm << "\n";
     std::cout << "--Press Enter--\n";
     std::getline(std::cin, line);
-    PageManager::changePage(this->previous);
+    PageManager::getInstance().changePage(this->previous);
 }

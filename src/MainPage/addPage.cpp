@@ -18,7 +18,7 @@ AddPage::AddPage() : Page()
 
 void AddPage::initNeighbourPages()
 {
-    this->previous = PageManager::getPage("mainPage");
+    this->previous = PageManager::getInstance().getPage("mainPage");
 }
 
 void AddPage::Load()
@@ -32,7 +32,7 @@ void AddPage::Load()
     {
         try
         {
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
         }
         catch (const std::exception &e)
         {
@@ -53,17 +53,17 @@ void AddPage::Load()
 
         if (line == "0" || line == "")
         {
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
             return;
         }
 
-        ShapeManager *sm = PageManager::getSM();
+        ShapeManager *sm = PageManager::getInstance().getSM();
         if (!sm)
         {
             std::cerr << "ShapeManager is not initialized!\n";
             std::cout << "--Press Enter--\n";
             std::getline(std::cin, line);
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
             return;
         }
 
@@ -92,7 +92,7 @@ void AddPage::Load()
             else
             {
                 std::cerr << "Invalid choice!\n";
-                PageManager::changePage(this->previous);
+                PageManager::getInstance().changePage(this->previous);
                 return;
             }
 
@@ -113,7 +113,7 @@ void AddPage::Load()
     {
         std::string dummy;
         std::getline(std::cin, dummy);
-        PageManager::changePage(this->previous);
+        PageManager::getInstance().changePage(this->previous);
     }
     catch (const std::exception &e)
     {

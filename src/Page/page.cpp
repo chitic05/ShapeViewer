@@ -30,7 +30,7 @@ void Page::changePage(Page *page)
 {
     try
     {
-        PageManager::changePage(page);
+        PageManager::getInstance().changePage(page);
     }
     catch (const std::exception &e)
     {

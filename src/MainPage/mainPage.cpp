@@ -18,10 +18,10 @@ MainPage::MainPage() : Page()
 void MainPage::initNeighbourPages()
 {
     this->previous = nullptr;
-    this->next[0] = PageManager::getPage("addPage");
-    this->next[1] = PageManager::getPage("deletePage");
-    this->next[2] = PageManager::getPage("modifyPage"); 
-    this->next[3] = PageManager::getPage("printPage");
+    this->next[0] = PageManager::getInstance().getPage("addPage");
+    this->next[1] = PageManager::getInstance().getPage("deletePage");
+    this->next[2] = PageManager::getInstance().getPage("modifyPage");
+    this->next[3] = PageManager::getInstance().getPage("printPage");
 }
 
 void MainPage::Load()
@@ -43,7 +43,7 @@ void MainPage::Load()
         {
             try
             {
-                PageManager::changePage(this->next[option - 1]);
+                PageManager::getInstance().changePage(this->next[option - 1]);
             }
             catch (const std::exception &e)
             {

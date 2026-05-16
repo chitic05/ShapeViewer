@@ -26,14 +26,14 @@ PrintPage::PrintPage() : Page()
 
 void PrintPage::initNeighbourPages()
 {
-    this->previous = PageManager::getPage("mainPage");
+    this->previous = PageManager::getInstance().getPage("mainPage");
 }
 
 void PrintPage::Load()
 {
     initNeighbourPages();
     std::cout << this->text << std::flush;
-    ShapeManager *sm = PageManager::getSM();
+    ShapeManager *sm = PageManager::getInstance().getSM();
 
     if (!sm || sm->getCount() == 0)
     {
@@ -59,7 +59,7 @@ void PrintPage::Load()
 
         if (choice == "0" || choice == "")
         {
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
             return;
         }
 
@@ -154,7 +154,7 @@ void PrintPage::Load()
         std::getline(std::cin, line);
         if (line == "")
         {
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
             return;
         }
         int selectedId = -1;
@@ -167,7 +167,7 @@ void PrintPage::Load()
             std::cout << "Invalid ID!\n";
             std::cout << "--Press Enter--\n";
             std::getline(std::cin, line);
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
             return;
         }
 
@@ -181,7 +181,7 @@ void PrintPage::Load()
             std::cout << "Shape with ID " << selectedId << " was not found!\n";
             std::cout << "--Press Enter--\n";
             std::getline(std::cin, line);
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
             return;
         }
 
@@ -193,7 +193,7 @@ void PrintPage::Load()
             std::cout << "--Press Enter--\n";
             std::string line;
             std::getline(std::cin, line);
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
             return;
         }
 
@@ -205,7 +205,7 @@ void PrintPage::Load()
             std::cout << "--Press Enter--\n";
             std::string line;
             std::getline(std::cin, line);
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
             return;
         }
 
@@ -218,7 +218,7 @@ void PrintPage::Load()
             std::cout << "--Press Enter--\n";
             std::string line;
             std::getline(std::cin, line);
-            PageManager::changePage(this->previous);
+            PageManager::getInstance().changePage(this->previous);
             return;
         }
 
@@ -283,7 +283,7 @@ void PrintPage::Load()
 
     try
     {
-        PageManager::changePage(this->previous);
+        PageManager::getInstance().changePage(this->previous);
     }
     catch (const std::exception &e)
     {
