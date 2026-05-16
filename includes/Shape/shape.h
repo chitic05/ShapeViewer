@@ -1,6 +1,8 @@
 #pragma once
 #include "Math/matrix.h"
 #include "Math/point.h"
+#include "IObject.h"
+#include <string>
 
 struct SDL_Renderer;
 
@@ -12,15 +14,8 @@ enum class Color
     GREEN
 };
 
-class Shape
+class Shape : public IObject
 {
-// PRIVATE: Doar metode din Shape pot accesa
-private:
-    // VALID: Shape::Shape() poate modifica newestId
-    // INVALID: Rectangle::Rectangle() NU poate accesa newestId (e private)
-    // INVALID: Codul extern NU poate citi newestId
-    static unsigned int newestId;
-
 // PROTECTED: Clasele derivate (Rectangle, Diamond, Square) pot accesa
 protected:
     // VALID: Rectangle poate modifica vertices in constructor
@@ -36,13 +31,9 @@ protected:
     // INVALID: Cod extern NU poate schimba color direct
     Color color;
     
-    // VALID: Rectangle stie ID-ul formei prin protected id
-    // INVALID: ShapeManager NU poate accesa id direct
-    unsigned int id;
-    
     // VALID: Diamond poate modifica name in operator=
     // INVALID: main() NU poate accesa name direct
-    char *name;
+    std::string name;
 
     // VALID: Rectangle poate apela getCentre() la initializare
     // INVALID: Codul extern NU poate apela getCentre()
@@ -51,19 +42,19 @@ protected:
 // PUBLIC: Accesibil din oriunde
 public:
     Shape();
-    Shape(unsigned int num, Point *vertices, Color color, const char *name);
+    Shape(unsigned int num, Point *vertices, Color color, const std::string& name);
     Shape(unsigned int num, Point *vertices);
-    Shape(unsigned int num, Point *vertices, const char *name);
+    Shape(unsigned int num, Point *vertices, const std::string& name);
 
     // Face o forma cu toate proprietatile si o muta in (centerX, centerY)
-    Shape(unsigned int num, Point *vertices, Color color, const char *name, float centerX,
+    Shape(unsigned int num, Point *vertices, Color color, const std::string& name, float centerX,
           float centerY);
 
     // Face o forma rosie cu nume default si o muta
     Shape(unsigned int num, Point *vertices, float centerX, float centerY);
 
     // Face o forma rosie cu nume specificat si o muta
-    Shape(unsigned int num, Point *vertices, const char *name, float centerX, float centerY);
+    Shape(unsigned int num, Point *vertices, const std::string& name, float centerX, float centerY);
 
     // Virtual destructor for proper polymorphic cleanup
     virtual ~Shape();
@@ -106,14 +97,16 @@ public:
     // Compara dupa numar de varfuri
     bool operator<(const Shape &other) const;
 
-    // Returneaza ID-ul formei
-    unsigned int getId() const;
-
     // Returneaza numarul de varfuri
     unsigned int getCount() const;
 
     // Returneaza culoarea formei
     Color getColor() const;
+
+    // Returneaza numele formei
+    const std::string& getName() const;
+
+    std::string toString() const override;
 
     float getPerimeter();
 

@@ -130,3 +130,19 @@ void ShapeRepository::sortShapesByPerimeter()
                                 << ", Perimeter=" << shape->getPerimeter() << "\n";
                   });
 }
+
+int ShapeRepository::getTotalShapeCount() const
+{
+    return static_cast<int>(vectorShapes.size());
+}
+
+ShapeRepository ShapeRepository::clone() const
+{
+    ShapeRepository cloned;
+    for (const auto& shape : vectorShapes) {
+        if (shape != nullptr) {
+            cloned.addShape(shape->clone());
+        }
+    }
+    return cloned;
+}

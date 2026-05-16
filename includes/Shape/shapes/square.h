@@ -17,6 +17,8 @@ public:
     // Virtual clone method for polymorphic deep copying
     virtual Shape* clone() const override;
 
+    std::string toString() const override;
+
     // Destructor
     virtual ~Square();
 

@@ -2,6 +2,7 @@
 #include "Shape/shape.h"
 #include "Shape/shapeRepository.h"
 #include <stdexcept>
+#include <string>
 
 class ShapeManager
 {
@@ -13,7 +14,7 @@ private:
     
     // VALID: ShapeManager constructor initializeaza name
     // INVALID: Extern code NU poate modifica name direct
-    char *name;
+    std::string name;
     
     // VALID: ShapeManager::operator+ foloseste maxCapacity
     // INVALID: Codul extern NU poate verifica capacity
@@ -25,10 +26,10 @@ public:
     ShapeManager();
 
     // Face un manager cu nume si capacitate specificate
-    ShapeManager(const char *name, unsigned int capacity);
+    ShapeManager(const std::string& name, unsigned int capacity);
 
     // Face un manager cu nume specificat si capacitate 100
-    ShapeManager(const char *name);
+    ShapeManager(const std::string& name);
 
     // Face un manager cu nume "Default" si capacitate specificata
     ShapeManager(unsigned int capacity);
@@ -81,7 +82,7 @@ public:
     unsigned int getCount() const;
 
     // Returneaza numele managerului
-    const char *getName() const;
+    const std::string& getName() const;
 
     // Returneaza referinta la repository (pentru acces direct la STL containers si algoritmi)
     ShapeRepository& getRepository();

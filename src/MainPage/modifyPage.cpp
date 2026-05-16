@@ -46,7 +46,7 @@ void ModifyPage::Load()
     std::cout << "4. Modify Square only\n";
     std::cout << "5. Modify shapes by color\n";
     std::cout << "6. Modify shapes sorted by perimeter\n";
-    std::cout << "7. Find shape by ID\n";
+    std::cout << "7. Modify shapes sorted by name\n";
     std::cout << "0. Go back\n";
     std::cout << "Enter your choice: ";
     std::string choice;
@@ -131,18 +131,15 @@ void ModifyPage::Load()
         }
         else if (choice == "7")
         {
-            // By ID
-            std::cout << "Enter shape ID: ";
-            std::string idStr;
-            std::getline(std::cin, idStr);
-            
-            try {
-                unsigned int id = std::stoi(idStr);
-                auto shape = sm->getRepository().findShapeById(id);
+            // Sorted by name
+            auto sorted = allShapes;
+            std::sort(sorted.begin(), sorted.end(),
+                     [](Shape* a, Shape* b) { return a->getName() < b->getName(); });
+
+            for (const auto& shape : sorted)
+            {
                 matchCount++;
                 std::cout << *shape << "\n";
-            } catch (...) {
-                std::cout << "Invalid ID or shape not found\n";
             }
         }
 
@@ -174,17 +171,12 @@ void ModifyPage::Load()
 
     unsigned int shapeId = std::stoi(line);
 
-    int shapeIndex = -1;
-    for (unsigned int i = 0; i < sm->getCount(); ++i)
+    Shape* selectedShape = nullptr;
+    try
     {
-        if ((*sm)[i]->getId() == shapeId)
-        {
-            shapeIndex = i;
-            break;
-        }
+        selectedShape = sm->getRepository().findShapeById(shapeId);
     }
-
-    if (shapeIndex == -1)
+    catch (...)
     {
         std::cerr << "Shape with ID " << shapeId << " was not found!\n";
         std::getline(std::cin, line);
@@ -226,7 +218,7 @@ void ModifyPage::Load()
         {
             float scale = std::stof(line);
             transformMatrix = Matrix::genScaleMatrix(scale);
-            *(*sm)[shapeIndex] = transformMatrix * *(*sm)[shapeIndex];
+            *selectedShape = transformMatrix * *selectedShape;
             std::cout << "Shape scaled successfully!\n";
         }
         catch (...)
@@ -242,7 +234,7 @@ void ModifyPage::Load()
         {
             float angle = std::stof(line);
             transformMatrix = Matrix::genRotateMatrix(-angle);
-            *(*sm)[shapeIndex] = transformMatrix * *(*sm)[shapeIndex];
+            *selectedShape = transformMatrix * *selectedShape;
             std::cout << "Shape rotated successfully!\n";
         }
         catch (...)
@@ -261,7 +253,7 @@ void ModifyPage::Load()
             std::getline(std::cin, line);
             float dy = std::stof(line);
             transformMatrix = Matrix::genTranslateMatrix(dx, dy);
-            *(*sm)[shapeIndex] = transformMatrix * *(*sm)[shapeIndex];
+            *selectedShape = transformMatrix * *selectedShape;
             std::cout << "Shape translated successfully!\n";
         }
         catch (...)

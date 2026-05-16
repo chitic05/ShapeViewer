@@ -1,23 +1,20 @@
 #include "Shape/shape.h"
-#include <cstring>
 #include <iostream>
 #include <limits>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <math.h>
 
-unsigned int Shape::newestId = 0;
-
-Shape::Shape() : id(++newestId), color(Color::RED), numVertices(0)
+Shape::Shape() : color(Color::RED), numVertices(0)
 {
     std::cout << "  [1] Shape::Constructor()" << std::endl;
     vertices = nullptr;
-    name = new char[9];
-    strcpy(name, "Polygone");
+    name = "Polygone";
 }
 
-Shape::Shape(unsigned int num, Point *vertices, Color color, const char *name)
-    : numVertices(num), color(color), id(++newestId)
+Shape::Shape(unsigned int num, Point *vertices, Color color, const std::string& name)
+    : numVertices(num), color(color)
 {
     this->vertices = new Point[num];
     for (unsigned int i = 0; i < num; ++i)
@@ -25,12 +22,11 @@ Shape::Shape(unsigned int num, Point *vertices, Color color, const char *name)
         this->vertices[i] = vertices[i];
     }
 
-    this->name = new char[strlen(name) + 1];
-    strcpy(this->name, name);
+    this->name = name;
 }
 
 Shape::Shape(unsigned int num, Point *vertices)
-    : numVertices(num), color(Color::RED), id(++newestId)
+    : numVertices(num), color(Color::RED)
 {
     this->vertices = new Point[num];
     for (unsigned int i = 0; i < num; ++i)
@@ -38,12 +34,11 @@ Shape::Shape(unsigned int num, Point *vertices)
         this->vertices[i] = vertices[i];
     }
 
-    this->name = new char[9];
-    strcpy(this->name, "Polygone");
+    this->name = "Polygone";
 }
 
-Shape::Shape(unsigned int num, Point *vertices, const char *name)
-    : numVertices(num), color(Color::RED), id(++newestId)
+Shape::Shape(unsigned int num, Point *vertices, const std::string& name)
+    : numVertices(num), color(Color::RED)
 {
     this->vertices = new Point[num];
     for (unsigned int i = 0; i < num; ++i)
@@ -51,13 +46,12 @@ Shape::Shape(unsigned int num, Point *vertices, const char *name)
         this->vertices[i] = vertices[i];
     }
 
-    this->name = new char[strlen(name) + 1];
-    strcpy(this->name, name);
+    this->name = name;
 }
 
-Shape::Shape(unsigned int num, Point *vertices, Color color, const char *name, float centerX,
+Shape::Shape(unsigned int num, Point *vertices, Color color, const std::string& name, float centerX,
              float centerY)
-    : numVertices(num), color(color), id(++newestId)
+    : numVertices(num), color(color)
 {
     this->vertices = new Point[num];
     for (unsigned int i = 0; i < num; ++i)
@@ -65,12 +59,11 @@ Shape::Shape(unsigned int num, Point *vertices, Color color, const char *name, f
         this->vertices[i] = vertices[i] + Point(centerX, centerY);
     }
 
-    this->name = new char[strlen(name) + 1];
-    strcpy(this->name, name);
+    this->name = name;
 }
 
 Shape::Shape(unsigned int num, Point *vertices, float centerX, float centerY)
-    : numVertices(num), color(Color::RED), id(++newestId)
+    : numVertices(num), color(Color::RED)
 {
     this->vertices = new Point[num];
     for (unsigned int i = 0; i < num; ++i)
@@ -78,12 +71,11 @@ Shape::Shape(unsigned int num, Point *vertices, float centerX, float centerY)
         this->vertices[i] = vertices[i] + Point(centerX, centerY);
     }
 
-    this->name = new char[9];
-    strcpy(this->name, "Polygone");
+    this->name = "Polygone";
 }
 
-Shape::Shape(unsigned int num, Point *vertices, const char *name, float centerX, float centerY)
-    : numVertices(num), color(Color::RED), id(++newestId)
+Shape::Shape(unsigned int num, Point *vertices, const std::string& name, float centerX, float centerY)
+    : numVertices(num), color(Color::RED)
 {
     this->vertices = new Point[num];
     for (unsigned int i = 0; i < num; ++i)
@@ -91,18 +83,16 @@ Shape::Shape(unsigned int num, Point *vertices, const char *name, float centerX,
         this->vertices[i] = vertices[i] + Point(centerX, centerY);
     }
 
-    this->name = new char[strlen(name) + 1];
-    strcpy(this->name, name);
+    this->name = name;
 }
 
 Shape::~Shape()
 {
     std::cout << "  [4] Shape::Destructor()" << std::endl;
     delete[] vertices;
-    delete[] name;
 }
 
-Shape::Shape(const Shape &other) : id(other.id)
+Shape::Shape(const Shape &other)
 {
     std::cout << "  [1] Shape::CopyConstructor()" << std::endl;
     if (other.numVertices > 0 && other.vertices)
@@ -120,8 +110,7 @@ Shape::Shape(const Shape &other) : id(other.id)
     }
 
     color = other.color;
-    name = new char[strlen(other.name) + 1];
-    strcpy(name, other.name);
+    name = other.name;
 }
 
 Shape* Shape::clone() const
@@ -135,7 +124,6 @@ Shape &Shape::operator=(const Shape &other)
         return *this;
 
     delete[] vertices;
-    delete[] name;
 
     if (other.numVertices > 0 && other.vertices)
     {
@@ -151,11 +139,8 @@ Shape &Shape::operator=(const Shape &other)
         vertices = nullptr;
     }
 
-    id = other.id;
     color = other.color;
-
-    name = new char[strlen(other.name) + 1];
-    strcpy(name, other.name);
+    name = other.name;
 
     return *this;
 }
@@ -205,7 +190,7 @@ Shape operator*(const Matrix &matrix, const Shape &shape)
 
 std::ostream &operator<<(std::ostream &out, const Shape &shape)
 {
-    out << shape.id << " | " << shape.name << " | ";
+    out << shape.getId() << " | " << shape.name << " | ";
 
     switch (shape.color)
     {
@@ -241,9 +226,16 @@ std::istream &operator>>(std::istream &in, Shape &shape)
     if (line.empty())
         line = "Polygone";
 
-    delete[] shape.name;
-    shape.name = new char[line.length() + 1];
-    strcpy(shape.name, line.c_str());
+    size_t pos = line.find('_');
+    while (pos != std::string::npos) {
+        line.replace(pos, 1, " ");
+        pos = line.find('_', pos + 1);
+    }
+
+    if (line.size() > 24)
+        line = line.substr(0, 24);
+
+    shape.name = line;
 
     std::cout << "Enter color (0-RED, 1-BLUE, 2-GREEN): ";
     std::getline(in, line);
@@ -276,13 +268,15 @@ std::istream &operator>>(std::istream &in, Shape &shape)
         if (shape.numVertices == 0 || shape.numVertices > 1000)
         {
             shape.numVertices = 3;
-            std::cout << "Invalid number, using 3 vertices.\n";
+            std::cout << "Invalid number, using " << std::to_string(shape.numVertices)
+                      << " vertices.\n";
         }
     }
     catch (...)
     {
         shape.numVertices = 3;
-        std::cout << "Invalid number, using 3 vertices.\n";
+        std::cout << "Invalid number, using " << std::to_string(shape.numVertices)
+                  << " vertices.\n";
     }
 
     if (shape.vertices)
@@ -298,9 +292,9 @@ std::istream &operator>>(std::istream &in, Shape &shape)
         {
             size_t pos;
 
-            float x = std::stof(line, &pos);
-            float y = std::stof(line.substr(pos));
-            shape.vertices[i] = Point(x, y);
+            double x = std::stod(line, &pos);
+            double y = std::stod(line.substr(pos));
+            shape.vertices[i] = Point(static_cast<float>(x), static_cast<float>(y));
         }
         catch (...)
         { // prinde toate erorile
@@ -345,23 +339,12 @@ Point Shape::getCentre() const
 
 bool Shape::operator==(const Shape &other) const
 {
-    Point centru1 = this->getCentre();
-    Point centru2 = other.getCentre();
-
-    return centru1 == centru2;
+    return getId() == other.getId();
 }
 
 bool Shape::operator<(const Shape &other) const
 {
-    Point centru1 = this->getCentre();
-    Point centru2 = other.getCentre();
-
-    return centru1 < centru2;
-}
-
-unsigned int Shape::getId() const
-{
-    return id;
+    return getId() < other.getId();
 }
 
 unsigned int Shape::getCount() const
@@ -372,6 +355,38 @@ unsigned int Shape::getCount() const
 Color Shape::getColor() const
 {
     return color;
+}
+
+const std::string& Shape::getName() const
+{
+    return name;
+}
+
+std::string Shape::toString() const
+{
+    std::ostringstream out;
+    out << getId() << " | " << name << " | ";
+    switch (color)
+    {
+    case Color::RED:
+        out << "RED";
+        break;
+    case Color::BLUE:
+        out << "BLUE";
+        break;
+    case Color::GREEN:
+        out << "GREEN";
+        break;
+    }
+
+    out << " | " << numVertices << " | ";
+    for (unsigned int i = 0; i < numVertices; ++i)
+    {
+        if (i > 0)
+            out << ", ";
+        out << "(" << (*this)[i].getCoord()[0] << "," << (*this)[i].getCoord()[1] << ")";
+    }
+    return out.str();
 }
 
 float Shape::getPerimeter(){

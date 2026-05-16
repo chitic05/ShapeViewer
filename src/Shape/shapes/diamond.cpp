@@ -1,7 +1,7 @@
 #include "Shape/shapes/diamond.h"
 #include <iostream>
 #include <cmath>
-#include <cstring>
+#include <sstream>
 #include <string>
 
 Diamond::Diamond(float d1, float d2)
@@ -43,6 +43,14 @@ Shape* Diamond::clone() const
     return new Diamond(*this);
 }
 
+std::string Diamond::toString() const
+{
+    std::ostringstream out;
+    out << "Diamond | " << Shape::toString()
+        << " | d1=" << diagonal1 << " | d2=" << diagonal2;
+    return out.str();
+}
+
 Diamond::~Diamond()
 {
     std::cout << "    [3] Diamond::Destructor()" << std::endl;
@@ -78,6 +86,7 @@ Shape *Diamond::create()
     std::getline(std::cin, line);
     if (line.empty())
         line = "Diamond";
+    const std::string nameInput = line;
     
     std::cout << "Enter color (0-RED, 1-BLUE, 2-GREEN): ";
     std::getline(std::cin, line);
@@ -95,15 +104,14 @@ Shape *Diamond::create()
     
     std::cout << "Enter first diagonal: ";
     std::getline(std::cin, line);
-    float diag1 = std::stof(line);
+    float diag1 = static_cast<float>(std::stod(line));
     
     std::cout << "Enter second diagonal: ";
     std::getline(std::cin, line);
-    float diag2 = std::stof(line);
+    float diag2 = static_cast<float>(std::stod(line));
     
     Diamond *diamond = new Diamond(diag1, diag2);
     diamond->color = (Color)colorChoice;
-    diamond->name = new char[8];
-    strcpy(diamond->name, "Diamond");
+    diamond->name = nameInput;
     return diamond;
 }

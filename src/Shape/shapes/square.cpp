@@ -1,7 +1,7 @@
 #include "Shape/shapes/square.h"
 #include <iostream>
 #include <cmath>
-#include <cstring>
+#include <sstream>
 #include <string>
 
 Square::Square(float side)
@@ -43,6 +43,14 @@ Square::Square(const Square &other)
 Shape* Square::clone() const
 {
     return new Square(*this);
+}
+
+std::string Square::toString() const
+{
+    std::ostringstream out;
+    out << "Square | " << Shape::toString()
+        << " | side=" << getSide();
+    return out.str();
 }
 
 Square::~Square()
@@ -88,6 +96,7 @@ Shape *Square::create()
     std::getline(std::cin, line);
     if (line.empty())
         line = "Square";
+    const std::string nameInput = line;
     
     std::cout << "Enter color (0-RED, 1-BLUE, 2-GREEN): ";
     std::getline(std::cin, line);
@@ -105,11 +114,10 @@ Shape *Square::create()
     
     std::cout << "Enter square side length: ";
     std::getline(std::cin, line);
-    float side = std::stof(line);
+    float side = static_cast<float>(std::stod(line));
     
     Square *square = new Square(side);
     square->color = (Color)colorChoice;
-    square->name = new char[7];
-    strcpy(square->name, "Square");
+    square->name = nameInput;
     return square;
 }

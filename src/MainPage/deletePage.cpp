@@ -43,7 +43,7 @@ void DeletePage::Load()
         std::cout << "4. Delete Square only\n";
         std::cout << "5. Delete shapes by color\n";
         std::cout << "6. Delete shapes sorted by perimeter\n";
-        std::cout << "7. Find shape by ID\n";
+        std::cout << "7. Delete shapes sorted by name\n";
         std::cout << "0. Go back\n";
         std::cout << "Enter your choice: ";
         std::string choice;
@@ -123,17 +123,14 @@ void DeletePage::Load()
             }
             else if (choice == "7")
             {
-                std::cout << "Enter shape ID: ";
-                std::string idStr;
-                std::getline(std::cin, idStr);
-                
-                try {
-                    unsigned int id = std::stoi(idStr);
-                    auto shape = sm->getRepository().findShapeById(id);
+                auto sorted = allShapes;
+                std::sort(sorted.begin(), sorted.end(),
+                         [](Shape* a, Shape* b) { return a->getName() < b->getName(); });
+
+                for (const auto& shape : sorted)
+                {
                     matchCount++;
                     std::cout << *shape << "\n";
-                } catch (...) {
-                    std::cout << "Invalid ID or shape not found\n";
                 }
             }
 
@@ -164,12 +161,13 @@ void DeletePage::Load()
             try
             {
                 unsigned int id = std::stoi(line);
+                sm->getRepository().findShapeById(id);
                 *sm -= id;
                 std::cout << "Shape deleted successfully!\n";
             }
             catch (const std::exception &e)
             {
-                std::cout << "Delete error: ID is invalid!\n";
+                std::cout << "Delete error: ID is invalid or not found!\n";
             }
         }
     }

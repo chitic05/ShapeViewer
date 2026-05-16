@@ -51,7 +51,7 @@ void PrintPage::Load()
         std::cout << "4. View Square shapes only\n";
         std::cout << "5. View shapes by color\n";
         std::cout << "6. View shapes sorted by perimeter\n";
-        std::cout << "7. Find shape by ID\n";
+        std::cout << "7. View shapes sorted by name\n";
         std::cout << "0. Go back\n";
         std::cout << "Enter your choice: ";
         std::string choice;
@@ -131,17 +131,14 @@ void PrintPage::Load()
             }
             else if (choice == "7")
             {
-                std::cout << "Enter shape ID: ";
-                std::string idStr;
-                std::getline(std::cin, idStr);
-                
-                try {
-                    unsigned int id = std::stoi(idStr);
-                    auto shape = sm->getRepository().findShapeById(id);
+                auto sorted = allShapes;
+                std::sort(sorted.begin(), sorted.end(),
+                         [](Shape* a, Shape* b) { return a->getName() < b->getName(); });
+
+                for (const auto& shape : sorted)
+                {
                     matchCount++;
                     std::cout << *shape << "\n";
-                } catch (...) {
-                    std::cout << "Invalid ID or shape not found\n";
                 }
             }
 
@@ -174,18 +171,12 @@ void PrintPage::Load()
             return;
         }
 
-        // Get shape with the respective id
         Shape *selectedShape = nullptr;
-        for (int i = 0; i < sm->getCount(); ++i)
+        try
         {
-            if ((*sm)[i]->getId() == selectedId)
-            {
-                selectedShape = (*sm)[i];
-                break;
-            }
+            selectedShape = sm->getRepository().findShapeById(static_cast<unsigned int>(selectedId));
         }
-
-        if (!selectedShape)
+        catch (...)
         {
             std::cout << "Shape with ID " << selectedId << " was not found!\n";
             std::cout << "--Press Enter--\n";

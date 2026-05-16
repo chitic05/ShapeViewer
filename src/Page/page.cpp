@@ -11,7 +11,7 @@ Page::~Page()
     delete[] next;
 }
 
-std::string Page::getName()
+const std::string& Page::getName()
 {
     return this->pageName;
 }

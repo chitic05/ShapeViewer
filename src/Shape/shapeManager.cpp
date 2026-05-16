@@ -1,7 +1,6 @@
 #include "Shape/shapeManager.h"
 #include "Page/pageManager.h"
 #include "customExceptions.h"
-#include <cstring>
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
@@ -11,39 +10,28 @@
 #include "Shape/shapes/square.h"
 
 ShapeManager::ShapeManager()
+    : name("Default"), maxCapacity(1000)
 {
-    name = new char[8];
-    strcpy(name, "Default");
-    maxCapacity = 1000;
 }
 
-ShapeManager::ShapeManager(const char *n, unsigned int capacity)
+ShapeManager::ShapeManager(const std::string& n, unsigned int capacity)
+    : name(n), maxCapacity(capacity)
 {
-    this->name = new char[strlen(n) + 1];
-    strcpy(this->name, n);
-    maxCapacity = capacity;
 }
 
-ShapeManager::ShapeManager(const char *n)
+ShapeManager::ShapeManager(const std::string& n)
+    : name(n), maxCapacity(1000)
 {
-    this->name = new char[strlen(n) + 1];
-    strcpy(this->name, n);
-    maxCapacity = 1000;
 }
 
 ShapeManager::ShapeManager(unsigned int capacity)
+    : name("Default"), maxCapacity(capacity)
 {
-    name = new char[8];
-    strcpy(name, "Default");
-    maxCapacity = capacity;
 }
 
 ShapeManager::ShapeManager(const ShapeManager &other)
-{   
-    name = new char[strlen(other.name) + 1];
-    strcpy(name, other.name);
-    maxCapacity = other.maxCapacity;
-    
+    : name(other.name), maxCapacity(other.maxCapacity)
+{
     repository = other.repository.clone();
 }
 
@@ -52,12 +40,8 @@ ShapeManager &ShapeManager::operator=(const ShapeManager &other)
     if (this == &other)
         return *this;
 
-    delete[] name;
-
-    name = new char[strlen(other.name) + 1];
-    strcpy(name, other.name);
+    name = other.name;
     maxCapacity = other.maxCapacity;
-    
     repository = other.repository.clone();
 
     return *this;
@@ -65,8 +49,6 @@ ShapeManager &ShapeManager::operator=(const ShapeManager &other)
 
 ShapeManager::~ShapeManager()
 {
-    delete[] name;
-
     if (PageManager::getSM() == this)
         PageManager::getSM() = nullptr;
 }
@@ -224,7 +206,7 @@ unsigned int ShapeManager::getCount() const
     return repository.getTotalShapeCount();
 }
 
-const char *ShapeManager::getName() const
+const std::string& ShapeManager::getName() const
 {
     return name;
 }

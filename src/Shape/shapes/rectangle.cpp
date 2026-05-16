@@ -1,6 +1,6 @@
 #include "Shape/shapes/rectangle.h"
 #include <iostream>
-#include <cstring>
+#include <sstream>
 #include <string>
 
 Rectangle::Rectangle(float w, float h)
@@ -42,6 +42,14 @@ Shape* Rectangle::clone() const
     return new Rectangle(*this);
 }
 
+std::string Rectangle::toString() const
+{
+    std::ostringstream out;
+    out << "Rectangle | " << Shape::toString()
+        << " | width=" << width << " | height=" << height;
+    return out.str();
+}
+
 Rectangle::~Rectangle()
 {
     std::cout << "    [3] Rectangle::Destructor()" << std::endl;
@@ -77,6 +85,7 @@ Shape *Rectangle::create()
     std::getline(std::cin, line);
     if (line.empty())
         line = "Rectangle";
+    const std::string nameInput = line;
     
     std::cout << "Enter color (0-RED, 1-BLUE, 2-GREEN): ";
     std::getline(std::cin, line);
@@ -94,15 +103,14 @@ Shape *Rectangle::create()
     
     std::cout << "Enter rectangle width: ";
     std::getline(std::cin, line);
-    float width = std::stof(line);
+    float width = static_cast<float>(std::stod(line));
     
     std::cout << "Enter rectangle height: ";
     std::getline(std::cin, line);
-    float height = std::stof(line);
+    float height = static_cast<float>(std::stod(line));
     
     Rectangle *rect = new Rectangle(width, height);
     rect->color = (Color)colorChoice;
-    rect->name = new char[10];
-    strcpy(rect->name, "Rectangle");
+    rect->name = nameInput;
     return rect;
 }

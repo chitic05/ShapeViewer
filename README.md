@@ -154,6 +154,7 @@ cmake --build build --config Release
 - **Copy Semantics** - Copy constructors and assignment operators
 - **final Keyword** - Preventing further inheritance on concrete classes
 - **Virtual Inheritance** - Resolving diamond inheritance pattern in Shape hierarchy
+- **IObject Interface** - Unique IDs generated via `IObject` base
 
 ## STL Usage
 

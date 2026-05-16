@@ -18,7 +18,7 @@ public:
     // Funcție pur virtuală - trebuie suprascrisă în clasele derivate
     virtual void Load() = 0;
 
-    std::string getName();
+    const std::string& getName();
 
     std::string getKey();
 
@@ -29,7 +29,7 @@ public:
     virtual ~Page();
 
 protected:
-    const char *pageName;
+    std::string pageName;
 
     std::string pageKey;
 
