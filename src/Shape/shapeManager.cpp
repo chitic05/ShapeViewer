@@ -1,5 +1,6 @@
 #include "Shape/shapeManager.h"
 #include "Page/pageManager.h"
+#include "customExceptions.h"
 #include <cstring>
 #include <iostream>
 #include <stdexcept>
@@ -84,17 +85,27 @@ ShapeManager ShapeManager::operator+(Shape* shape) const
 {
     ShapeManager result = *this;
 
-    if (result.repository.getTotalShapeCount() < result.maxCapacity) {
-        result.repository.addShape(shape);
-    }
+    if (!shape)
+        throw std::invalid_argument("Cannot add null shape");
+
+    if (result.repository.getTotalShapeCount() >= result.maxCapacity)
+        throw CapacityException(result.maxCapacity, result.repository.getTotalShapeCount() + 1,
+                                shape->getId(), "ShapeManager capacity exceeded");
+
+    result.repository.addShape(shape);
     return result;
 }
 
 ShapeManager &ShapeManager::operator+=(Shape* shape)
 {
-    if (repository.getTotalShapeCount() < maxCapacity) {
-        repository.addShape(shape);
-    }
+    if (!shape)
+        throw std::invalid_argument("Cannot add null shape");
+
+    if (repository.getTotalShapeCount() >= maxCapacity)
+        throw CapacityException(maxCapacity, repository.getTotalShapeCount() + 1,
+                                shape->getId(), "ShapeManager capacity exceeded");
+
+    repository.addShape(shape);
     return *this;
 }
 
@@ -115,7 +126,7 @@ ShapeManager &ShapeManager::operator-=(unsigned int id)
 {
     try {
         repository.removeShapeById(id);
-    } catch (const std::runtime_error&) {
+    } catch (const ElementNotFoundException&) {
         // Ignore if shape not found
     }
     

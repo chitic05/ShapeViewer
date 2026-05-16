@@ -9,8 +9,11 @@
 class ShapeRepository
 {
 private:
+    // vector: O(1) push_back, O(n) remove/erase, O(1) indexed access
     std::vector<Shape*> vectorShapes;
+    // list: O(1) insert/erase with iterator, O(n) search
     std::list<Shape*> listShapes;
+    // map: O(log n) find/insert/erase by id, keeps keys ordered
     std::map<unsigned int, Shape*> mapShapesById;
 
 public:
@@ -28,7 +31,4 @@ public:
     void sortShapesByPerimeter();
     int getTotalShapeCount() const;
     ShapeRepository clone() const;
-    
-    void demonstrateCRUD();
-    void demonstrateAlgorithms();
 };

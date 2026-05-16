@@ -155,3 +155,25 @@ cmake --build build --config Release
 - **final Keyword** - Preventing further inheritance on concrete classes
 - **Virtual Inheritance** - Resolving diamond inheritance pattern in Shape hierarchy
 
+## STL Usage
+
+### Containers
+
+- `std::vector` - main iteration + indexed access for shapes
+- `std::list` - stable node removals for delete operations
+- `std::map` - lookup by ID
+- `std::unordered_map` - page registry by key
+
+### Algorithms
+
+- `std::find_if` - equality checks in ShapeManager and filtered lookups
+- `std::copy_if` - filter shapes by color
+- `std::count_if` - count shapes by predicate
+- `std::remove_if` + `erase` - erase-remove idiom on vector
+- `std::for_each` - formatted printing and batch operations
+- `std::sort` - perimeter-based ordering in pages and repository
+
+### Pair / Structured Binding
+
+- Structured binding on a map iterator to access `(id, shape)` in remove operations
+
