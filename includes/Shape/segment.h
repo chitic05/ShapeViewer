@@ -22,7 +22,7 @@ public:
     Segment(const Segment &other);
 
     // Destructor
-    ~Segment();
+    ~Segment() noexcept;
 
     // Getters
     Point getStart() const;

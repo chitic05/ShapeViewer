@@ -6,7 +6,7 @@ Page::Page(){
     next = new Page*[1000];
 }
 
-Page::~Page()
+Page::~Page() noexcept
 {
     delete[] next;
 }

@@ -3,6 +3,7 @@
 #include "Page/pageManager.h"
 #include "Shape/shapeManager.h"
 #include "customExceptions.h"
+#include "Utility/fixedBuffer.h"
 #include <iostream>
 #include <cmath>
 

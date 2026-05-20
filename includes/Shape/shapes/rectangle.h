@@ -22,7 +22,7 @@ public:
     std::string toString() const override;
 
     // Destructor
-    virtual ~Rectangle();
+    virtual ~Rectangle() noexcept;
 
     // Assignment operator
     Rectangle &operator=(const Rectangle &other);

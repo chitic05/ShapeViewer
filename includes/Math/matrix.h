@@ -28,7 +28,7 @@ public:
     Matrix(unsigned int n);
 
     // Destructorul pentru a nu avea pierderi de memorie
-    ~Matrix();
+    ~Matrix() noexcept;
 
     // Copy constructor
     Matrix(const Matrix &other);

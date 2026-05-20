@@ -27,7 +27,7 @@ Segment::Segment(const Segment &other) : start(other.start), end(other.end)
 }
 
 // Destructor
-Segment::~Segment()
+Segment::~Segment() noexcept
 {
     std::cout << "    [Segment] Destructor" << std::endl;
 }

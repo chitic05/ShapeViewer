@@ -23,7 +23,7 @@ public:
     std::string toString() const override;
 
     // Destructor
-    virtual ~Diamond();
+    virtual ~Diamond() noexcept;
 
     // Assignment operator
     Diamond &operator=(const Diamond &other);

@@ -1,12 +1,12 @@
 #include "Page/pageManager.h"
 #include "MainPage/addPage.h"
 #include "MainPage/deletePage.h"
+#include "MainPage/logPage.h"
 #include "MainPage/mainPage.h"
 #include "MainPage/modifyPage.h"
 #include "MainPage/printPage.h"
 #include "Shape/shapeManager.h"
-// Adaugă header-ul fabricii tale abstracte aici dacă nu e inclus în altă parte
-// #include "Shape/shapeFactory.h" 
+#include "Utility/logger.h"
 #include "terminal.hpp"
 #include <stdexcept>
 
@@ -19,6 +19,7 @@ PageManager::PageManager()
     allPages["deletePage"] = std::make_unique<DeletePage>();
     allPages["printPage"] = std::make_unique<PrintPage>();
     allPages["modifyPage"] = std::make_unique<ModifyPage>();
+    allPages["logPage"] = std::make_unique<LogPage>();
 }
 
 // Meyers Singleton - instanța unică statică locală
@@ -45,6 +46,8 @@ void PageManager::setShapeFactory(std::unique_ptr<IShapeFactory> factory)
     if(addPage){
         addPage->setFactory(shapeFactory.get());
     }
+
+    Logger::getInstance().log("Shape factory changed");
 }
 
 void PageManager::changePage(Page *nextPage)

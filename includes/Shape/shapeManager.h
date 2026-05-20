@@ -40,7 +40,7 @@ public:
     ShapeManager &operator=(const ShapeManager &other);
 
     // Destructorul pentru a nu avea pierderi de memorie
-    ~ShapeManager();
+    ~ShapeManager() noexcept;
 
     // Access Shape pointer by index
     Shape *operator[](unsigned int index);

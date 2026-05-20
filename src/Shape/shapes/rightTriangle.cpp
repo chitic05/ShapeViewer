@@ -54,7 +54,7 @@ std::string RightTriangle::toString() const
     return out.str();
 }
 
-RightTriangle::~RightTriangle()
+RightTriangle::~RightTriangle() noexcept
 {
     std::cout << "    [3] RightTriangle::Destructor()" << std::endl;
     std::cout << "[RightTriangle] Destructed" << std::endl;

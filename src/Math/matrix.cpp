@@ -1,5 +1,6 @@
 #include "Math/matrix.h"
 #include <cmath>
+#include <stdexcept>
 
 Matrix::Matrix(const Point &p) : rows(3), cols(1)
 {
@@ -50,7 +51,7 @@ Matrix::Matrix(unsigned int n) : rows(n), cols(n)
     }
 }
 
-Matrix::~Matrix()
+Matrix::~Matrix() noexcept
 {
     if (data)
     {
@@ -103,8 +104,7 @@ Matrix Matrix::operator+(const Matrix &other) const
 {
     if (rows != other.rows || cols != other.cols)
     {
-        std::cerr << "This addition cannot be performed\n";
-        return Matrix();
+        throw std::invalid_argument("Matrix addition requires matching dimensions");
     }
 
     Matrix result = Matrix(rows, cols);
@@ -121,8 +121,7 @@ Matrix Matrix::operator-(const Matrix &other) const
 {
     if (rows != other.rows || cols != other.cols)
     {
-        std::cerr << "This subtraction cannot be performed\n";
-        return Matrix();
+        throw std::invalid_argument("Matrix subtraction requires matching dimensions");
     }
 
     Matrix result = Matrix(rows, cols);
@@ -139,8 +138,7 @@ Matrix Matrix::operator*(const Matrix &other) const
 {
     if (cols != other.rows)
     {
-        std::cerr << "This multiplication cannot be performed\n";
-        return Matrix();
+        throw std::invalid_argument("Matrix multiplication requires matching inner dimensions");
     }
 
     Matrix result = Matrix(rows, other.cols);
@@ -177,15 +175,12 @@ const float *Matrix::operator[](unsigned int index) const
 {
     if (data == nullptr)
     {
-        std::cerr << "Error: Matrix is uninitialized!\n";
-        return nullptr;
+        throw std::runtime_error("Matrix is uninitialized");
     }
 
     if (index >= rows)
     {
-        std::cerr << "Error: Index " << index << " is out of bounds (rows: " << rows
-                  << ")\n";
-        return nullptr;
+        throw std::out_of_range("Matrix row index out of bounds");
     }
 
     return data[index];
@@ -195,15 +190,12 @@ float *Matrix::operator[](unsigned int index)
 {
     if (data == nullptr)
     {
-        std::cerr << "Error: Matrix is uninitialized!\n";
-        return nullptr;
+        throw std::runtime_error("Matrix is uninitialized");
     }
 
     if (index >= rows)
     {
-        std::cerr << "Error: Index " << index << " is out of bounds (rows: " << rows
-                  << ")\n";
-        return nullptr;
+        throw std::out_of_range("Matrix row index out of bounds");
     }
 
     return data[index];

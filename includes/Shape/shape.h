@@ -57,7 +57,7 @@ public:
     Shape(unsigned int num, Point *vertices, const std::string& name, float centerX, float centerY);
 
     // Virtual destructor for proper polymorphic cleanup
-    virtual ~Shape();
+    virtual ~Shape() noexcept;
 
     // Copy constructor
     Shape(const Shape &other);

@@ -54,7 +54,7 @@ std::string EquilateralTriangle::toString() const
     return out.str();
 }
 
-EquilateralTriangle::~EquilateralTriangle()
+EquilateralTriangle::~EquilateralTriangle() noexcept
 {
     std::cout << "    [3] EquilateralTriangle::Destructor()" << std::endl;
     std::cout << "[EquilateralTriangle] Destructed" << std::endl;

@@ -61,11 +61,12 @@ cmake --build build --config Release
 
 ### Main Pages
 
-1. **Main Page** - The main menu with 5 options:
+1. **Main Page** - The main menu with 6 options:
    - Add shape
    - Delete shape
    - Modify shape
    - Display shapes
+  - View journal
    - Exit
 
 2. **Add Page** - Adds new shapes:
@@ -158,13 +159,15 @@ cmake --build build --config Release
 - **Virtual Inheritance** - Resolving diamond inheritance pattern in Shape hierarchy
 - **IObject Interface** - Unique IDs generated via `IObject` base
 - **Singleton (Meyers)** - `PageManager` centralizes page navigation and state
+- **Singleton (Meyers)** - `Logger` stores journal entries
 - **Abstract Factory** - `IShapeFactory` with three concrete families and two abstract products (`Patrulater`, `Triangle`)
+- **Templates** - `FixedBuffer<T, N>` with vector-backed storage, exceptions, and template utilities
 
 ## STL Usage
 
 ### Containers
 
-- `std::vector` - main iteration + indexed access for shapes
+- `std::vector` - filtered shape results and internal storage for `FixedBuffer`
 - `std::list` - stable node removals for delete operations
 - `std::map` - lookup by ID
 - `std::unordered_map` - page registry by key
@@ -181,4 +184,12 @@ cmake --build build --config Release
 ### Pair / Structured Binding
 
 - Structured binding on a map iterator to access `(id, shape)` in remove operations
+
+## Template Requirements
+
+- **Template class**: `FixedBuffer<T, N>` manages heap storage, uses exceptions on overflow/underflow, and lives in [includes/Utility/fixedBuffer.h](includes/Utility/fixedBuffer.h)
+- **Template method inside template class**: `convert<U>()` converts buffer element types with independent template parameter
+- **Free template functions**: `sumBuffer` and `findIndex` used in repository logic
+- **Full specialization**: `toDebugString<Point>` for cleaner point output (documented in code)
+- **Non-type template parameter**: `FixedBuffer<T, N>` uses `N` as compile-time capacity
 

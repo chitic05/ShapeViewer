@@ -50,7 +50,7 @@ std::string Rectangle::toString() const
     return out.str();
 }
 
-Rectangle::~Rectangle()
+Rectangle::~Rectangle() noexcept
 {
     std::cout << "    [3] Rectangle::Destructor()" << std::endl;
     std::cout << "[Rectangle] Destructed" << std::endl;

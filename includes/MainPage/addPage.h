@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Page/page.h"
-
-class IShapeFactory;
+#include <Factory/abstractFactory.h>
 
 // final - previne ereditarea din AddPage
 // VALID: AddPage e endpoint in ierarhia Page (nu se mai mosteneste)

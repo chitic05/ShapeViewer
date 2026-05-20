@@ -15,7 +15,7 @@ public:
     Shape *clone() const override;
     std::string toString() const override;
 
-    ~EquilateralTriangle() override;
+    ~EquilateralTriangle() noexcept override;
 
     EquilateralTriangle &operator=(const EquilateralTriangle &other);
 

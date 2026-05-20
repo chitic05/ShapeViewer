@@ -26,7 +26,7 @@ public:
 
     void changePage(Page *page);
 
-    virtual ~Page();
+    virtual ~Page() noexcept;
 
 protected:
     std::string pageName;

@@ -51,7 +51,7 @@ std::string Diamond::toString() const
     return out.str();
 }
 
-Diamond::~Diamond()
+Diamond::~Diamond() noexcept
 {
     std::cout << "    [3] Diamond::Destructor()" << std::endl;
     std::cout << "[Diamond] Destructed" << std::endl;

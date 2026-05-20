@@ -86,7 +86,7 @@ Shape::Shape(unsigned int num, Point *vertices, const std::string& name, float c
     this->name = name;
 }
 
-Shape::~Shape()
+Shape::~Shape() noexcept
 {
     std::cout << "  [4] Shape::Destructor()" << std::endl;
     delete[] vertices;

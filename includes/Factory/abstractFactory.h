@@ -4,19 +4,19 @@
 class Patrulater : virtual public Shape
 {
 public:
-    virtual ~Patrulater() = default;
+    virtual ~Patrulater() noexcept = default;
 };
 
 class Triangle : virtual public Shape
 {
 public:
-    virtual ~Triangle() = default;
+    virtual ~Triangle() noexcept = default;
 };
 
 class IShapeFactory
 {
 public:
-    virtual ~IShapeFactory() = default;
+    virtual ~IShapeFactory() noexcept = default;
     virtual Patrulater *createPatrulater() = 0;
     virtual Triangle *createTriangle() = 0;
 };

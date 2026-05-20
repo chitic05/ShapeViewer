@@ -27,7 +27,7 @@ public:
     Point(int g);
 
     // Destructorul pentru a nu avea pierderi de memorie
-    ~Point();
+    ~Point() noexcept;
 
     // Copy constructor
     Point(const Point &other);

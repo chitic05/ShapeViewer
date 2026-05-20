@@ -11,7 +11,8 @@ MainPage::MainPage() : Page()
                  "2. Delete shape\n"
                  "3. Modify shape\n"
                  "4. Display shapes\n"
-                 "5. Exit\n"
+                 "5. View journal\n"
+                 "6. Exit\n"
                  "--Type the option number and press Enter--\n";
 }
 
@@ -22,6 +23,7 @@ void MainPage::initNeighbourPages()
     this->next[1] = PageManager::getInstance().getPage("deletePage");
     this->next[2] = PageManager::getInstance().getPage("modifyPage");
     this->next[3] = PageManager::getInstance().getPage("printPage");
+    this->next[4] = PageManager::getInstance().getPage("logPage");
 }
 
 void MainPage::Load()
@@ -34,12 +36,12 @@ void MainPage::Load()
     if (onlyDigits(line))
     {
         int option = std::stoi(line);
-        if (option == 5)
+        if (option == 6)
         {
             std::cout << "Exiting...\n";
             return;
         }
-        if (option <= 4 && option > 0)
+        if (option <= 5 && option > 0)
         {
             try
             {

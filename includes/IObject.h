@@ -1,4 +1,5 @@
 #pragma once
+#include <ostream>
 #include <string>
 
 class IObject
@@ -21,7 +22,7 @@ public:
         return *this;
     }
 
-    virtual ~IObject() = default;
+    virtual ~IObject() noexcept = default;
 
     unsigned int getId() const noexcept
     {
@@ -38,5 +39,11 @@ public:
     friend bool operator==(const IObject& left, const IObject& right)
     {
         return left.getId() == right.getId();
+    }
+
+    friend std::ostream& operator<<(std::ostream& out, const IObject& obj)
+    {
+        out << obj.toString();
+        return out;
     }
 };

@@ -53,7 +53,7 @@ std::string Square::toString() const
     return out.str();
 }
 
-Square::~Square()
+Square::~Square() noexcept
 {
     std::cout << "      [5] Square::Destructor()" << std::endl;
     std::cout << "[Square] Destructed" << std::endl;

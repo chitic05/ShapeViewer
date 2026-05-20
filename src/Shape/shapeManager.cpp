@@ -47,7 +47,7 @@ ShapeManager &ShapeManager::operator=(const ShapeManager &other)
     return *this;
 }
 
-ShapeManager::~ShapeManager()
+ShapeManager::~ShapeManager() noexcept
 {
     if (PageManager::getInstance().getSM() == this)
         PageManager::getInstance().getSM() = nullptr;

@@ -1,5 +1,13 @@
 #include "Math/point.h"
+#include "customExceptions.h"
 #include <cmath>
+#include <stdexcept>
+
+static void validateCoord(float value, int index)
+{
+    if (!std::isfinite(value))
+        throw InvalidCoordinateException(value, index, "Coordinate must be finite");
+}
 
 int Point::contPct = 0;
 
@@ -10,11 +18,15 @@ Point::Point() : id(++contPct)
 
 Point::Point(float x, float y) : id(++contPct)
 {
+    validateCoord(x, 0);
+    validateCoord(y, 1);
     coord = new float[2]{x, y};
 }
 
 Point::Point(float i) : id(++contPct)
 {
+    validateCoord(i, 0);
+    validateCoord(i, 1);
     coord = new float[2]{i, i};
 }
 
@@ -33,7 +45,7 @@ Point::Point(int g) : id(++contPct)
     coord = new float[2]{c, s};
 }
 
-Point::~Point()
+Point::~Point() noexcept
 {
     if (coord)
         delete[] coord;
@@ -71,9 +83,7 @@ float &Point::operator[](unsigned int index)
         return coord[0];
     if (index == 1)
         return coord[1];
-    else
-        std::cerr << "This index doesn't exist";
-    return coord[0];
+    throw std::out_of_range("Point index out of bounds");
 }
 float Point::operator[](unsigned int index) const
 {
@@ -82,9 +92,7 @@ float Point::operator[](unsigned int index) const
 
     if (index == 1)
         return coord[1];
-    else
-        std::cerr << "This index doesn't exist";
-    return coord[0];
+    throw std::out_of_range("Point index out of bounds");
 }
 
 std::ostream &operator<<(std::ostream &out, const Point &other)
@@ -108,6 +116,8 @@ void Point::setCoord(float x, float y)
 {
     if (coord)
     {
+        validateCoord(x, 0);
+        validateCoord(y, 1);
         coord[0] = x;
         coord[1] = y;
     }

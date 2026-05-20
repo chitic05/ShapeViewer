@@ -21,7 +21,7 @@ public:
     std::string toString() const override;
 
     // Destructor
-    virtual ~Square();
+    virtual ~Square() noexcept;
 
     // Assignment operator
     Square &operator=(const Square &other);
