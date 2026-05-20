@@ -3,6 +3,7 @@
 #include "Page/pageManager.h"
 #include "Shape/shape.h"
 #include "Shape/shapeManager.h"
+#include "customExceptions.h"
 #include "terminal.hpp"
 #include <memory>
 
@@ -130,6 +131,14 @@ void AddPage::Load()
             {
                 *sm += newShape;
             }
+        }
+        catch (const CapacityException &e)
+        {
+            std::cerr << "Capacity error: " << e.getDetails() << "\n";
+        }
+        catch (const ShapeException &e)
+        {
+            std::cerr << "Shape error: " << e.getDetails() << "\n";
         }
         catch (const std::exception &e)
         {

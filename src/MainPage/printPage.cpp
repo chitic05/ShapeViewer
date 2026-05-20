@@ -10,6 +10,7 @@
 #include "Shape/shapes/equilateralTriangle.h"
 #include "Factory/abstractFactory.h"
 #include "Shape/shapeManager.h"
+#include "customExceptions.h"
 #include "terminal.hpp"
 #include <string>
 #include <typeinfo>
@@ -228,9 +229,9 @@ void PrintPage::Load()
         {
             selectedId = std::stoi(line);
         }
-        catch (...)
+        catch (const std::exception &e)
         {
-            std::cout << "Invalid ID!\n";
+            std::cout << "Invalid ID: " << e.what() << "\n";
             std::cout << "--Press Enter--\n";
             std::getline(std::cin, line);
             PageManager::getInstance().changePage(this->previous);
@@ -242,9 +243,17 @@ void PrintPage::Load()
         {
             selectedShape = sm->getRepository().findShapeById(static_cast<unsigned int>(selectedId));
         }
-        catch (...)
+        catch (const ElementNotFoundException &e)
         {
-            std::cout << "Shape with ID " << selectedId << " was not found!\n";
+            std::cout << "Shape not found: " << e.getDetails() << "\n";
+            std::cout << "--Press Enter--\n";
+            std::getline(std::cin, line);
+            PageManager::getInstance().changePage(this->previous);
+            return;
+        }
+        catch (const std::exception &e)
+        {
+            std::cout << "Error selecting shape: " << e.what() << "\n";
             std::cout << "--Press Enter--\n";
             std::getline(std::cin, line);
             PageManager::getInstance().changePage(this->previous);

@@ -11,26 +11,27 @@ static void validateCoord(float value, int index)
 
 int Point::contPct = 0;
 
-Point::Point() : id(++contPct)
+Point::Point() : id(++contPct), coord{0.0f, 0.0f}
 {
-    coord = new float[2]{0, 0};
 }
 
-Point::Point(float x, float y) : id(++contPct)
+Point::Point(float x, float y) : id(++contPct), coord{0.0f, 0.0f}
 {
     validateCoord(x, 0);
     validateCoord(y, 1);
-    coord = new float[2]{x, y};
+    coord[0] = x;
+    coord[1] = y;
 }
 
-Point::Point(float i) : id(++contPct)
+Point::Point(float i) : id(++contPct), coord{0.0f, 0.0f}
 {
     validateCoord(i, 0);
     validateCoord(i, 1);
-    coord = new float[2]{i, i};
+    coord[0] = i;
+    coord[1] = i;
 }
 
-Point::Point(int g) : id(++contPct)
+Point::Point(int g) : id(++contPct), coord{0.0f, 0.0f}
 {
     const float PI = 3.14159265358979323846f;
     float rad = g * PI / 180.0f;
@@ -42,18 +43,14 @@ Point::Point(int g) : id(++contPct)
     if (fabs(s) < 1e-6)
         s = 0.0f;
 
-    coord = new float[2]{c, s};
+    coord[0] = c;
+    coord[1] = s;
 }
 
-Point::~Point() noexcept
-{
-    if (coord)
-        delete[] coord;
-}
+Point::~Point() noexcept = default;
 
-Point::Point(const Point &other) : id(other.id)
+Point::Point(const Point &other) : id(other.id), coord(other.coord)
 {
-    coord = new float[2]{other.coord[0], other.coord[1]};
 }
 
 Point &Point::operator=(const Point &other)
@@ -61,9 +58,7 @@ Point &Point::operator=(const Point &other)
     if (this == &other)
         return *this;
 
-    if (coord)
-        delete[] coord;
-    coord = new float[2]{other.coord[0], other.coord[1]};
+    coord = other.coord;
     return *this;
 }
 
@@ -109,18 +104,15 @@ std::istream &operator>>(std::istream &in, Point &other)
 
 const float *Point::getCoord() const
 {
-    return coord;
+    return coord.data();
 }
 
 void Point::setCoord(float x, float y)
 {
-    if (coord)
-    {
-        validateCoord(x, 0);
-        validateCoord(y, 1);
-        coord[0] = x;
-        coord[1] = y;
-    }
+    validateCoord(x, 0);
+    validateCoord(y, 1);
+    coord[0] = x;
+    coord[1] = y;
 }
 
 Point &Point::operator++()

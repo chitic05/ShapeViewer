@@ -8,6 +8,7 @@
 #include "Shape/shapes/equilateralTriangle.h"
 #include "Factory/abstractFactory.h"
 #include "Shape/shapeManager.h"
+#include "customExceptions.h"
 #include "terminal.hpp"
 #include <string>
 #include <cstdlib>
@@ -231,9 +232,21 @@ void DeletePage::Load()
                 *sm -= id;
                 std::cout << "Shape deleted successfully!\n";
             }
+            catch (const ElementNotFoundException &e)
+            {
+                std::cout << "Delete error: " << e.getDetails() << "\n";
+            }
+            catch (const std::invalid_argument &e)
+            {
+                std::cout << "Delete error: invalid ID format.\n";
+            }
+            catch (const std::out_of_range &e)
+            {
+                std::cout << "Delete error: ID out of range.\n";
+            }
             catch (const std::exception &e)
             {
-                std::cout << "Delete error: ID is invalid or not found!\n";
+                std::cout << "Delete error: " << e.what() << "\n";
             }
         }
     }

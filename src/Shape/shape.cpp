@@ -9,18 +9,14 @@
 Shape::Shape() : color(Color::RED), numVertices(0)
 {
     std::cout << "  [1] Shape::Constructor()" << std::endl;
-    vertices = nullptr;
+    vertices.clear();
     name = "Polygone";
 }
 
 Shape::Shape(unsigned int num, Point *vertices, Color color, const std::string& name)
     : numVertices(num), color(color)
 {
-    this->vertices = new Point[num];
-    for (unsigned int i = 0; i < num; ++i)
-    {
-        this->vertices[i] = vertices[i];
-    }
+    this->vertices.assign(vertices, vertices + num);
 
     this->name = name;
 }
@@ -28,11 +24,7 @@ Shape::Shape(unsigned int num, Point *vertices, Color color, const std::string& 
 Shape::Shape(unsigned int num, Point *vertices)
     : numVertices(num), color(Color::RED)
 {
-    this->vertices = new Point[num];
-    for (unsigned int i = 0; i < num; ++i)
-    {
-        this->vertices[i] = vertices[i];
-    }
+    this->vertices.assign(vertices, vertices + num);
 
     this->name = "Polygone";
 }
@@ -40,11 +32,7 @@ Shape::Shape(unsigned int num, Point *vertices)
 Shape::Shape(unsigned int num, Point *vertices, const std::string& name)
     : numVertices(num), color(Color::RED)
 {
-    this->vertices = new Point[num];
-    for (unsigned int i = 0; i < num; ++i)
-    {
-        this->vertices[i] = vertices[i];
-    }
+    this->vertices.assign(vertices, vertices + num);
 
     this->name = name;
 }
@@ -53,11 +41,9 @@ Shape::Shape(unsigned int num, Point *vertices, Color color, const std::string& 
              float centerY)
     : numVertices(num), color(color)
 {
-    this->vertices = new Point[num];
+    this->vertices.resize(num);
     for (unsigned int i = 0; i < num; ++i)
-    {
         this->vertices[i] = vertices[i] + Point(centerX, centerY);
-    }
 
     this->name = name;
 }
@@ -65,11 +51,9 @@ Shape::Shape(unsigned int num, Point *vertices, Color color, const std::string& 
 Shape::Shape(unsigned int num, Point *vertices, float centerX, float centerY)
     : numVertices(num), color(Color::RED)
 {
-    this->vertices = new Point[num];
+    this->vertices.resize(num);
     for (unsigned int i = 0; i < num; ++i)
-    {
         this->vertices[i] = vertices[i] + Point(centerX, centerY);
-    }
 
     this->name = "Polygone";
 }
@@ -77,11 +61,9 @@ Shape::Shape(unsigned int num, Point *vertices, float centerX, float centerY)
 Shape::Shape(unsigned int num, Point *vertices, const std::string& name, float centerX, float centerY)
     : numVertices(num), color(Color::RED)
 {
-    this->vertices = new Point[num];
+    this->vertices.resize(num);
     for (unsigned int i = 0; i < num; ++i)
-    {
         this->vertices[i] = vertices[i] + Point(centerX, centerY);
-    }
 
     this->name = name;
 }
@@ -89,25 +71,13 @@ Shape::Shape(unsigned int num, Point *vertices, const std::string& name, float c
 Shape::~Shape() noexcept
 {
     std::cout << "  [4] Shape::Destructor()" << std::endl;
-    delete[] vertices;
 }
 
 Shape::Shape(const Shape &other)
 {
     std::cout << "  [1] Shape::CopyConstructor()" << std::endl;
-    if (other.numVertices > 0 && other.vertices)
-    {
-        numVertices = other.numVertices;
-
-        vertices = new Point[numVertices];
-        for (unsigned int i = 0; i < numVertices; ++i)
-            vertices[i] = other.vertices[i];
-    }
-    else
-    {
-        numVertices = 0;
-        vertices = nullptr;
-    }
+    numVertices = other.numVertices;
+    vertices = other.vertices;
 
     color = other.color;
     name = other.name;
@@ -123,21 +93,8 @@ Shape &Shape::operator=(const Shape &other)
     if (this == &other)
         return *this;
 
-    delete[] vertices;
-
-    if (other.numVertices > 0 && other.vertices)
-    {
-        numVertices = other.numVertices;
-
-        vertices = new Point[numVertices];
-        for (unsigned int i = 0; i < numVertices; ++i)
-            vertices[i] = other.vertices[i];
-    }
-    else
-    {
-        numVertices = 0;
-        vertices = nullptr;
-    }
+    numVertices = other.numVertices;
+    vertices = other.vertices;
 
     color = other.color;
     name = other.name;
@@ -147,7 +104,7 @@ Shape &Shape::operator=(const Shape &other)
 
 Point &Shape::operator[](unsigned int index)
 {
-    if (vertices && index < numVertices)
+    if (index < numVertices)
     {
         return vertices[index];
     }
@@ -157,7 +114,7 @@ Point &Shape::operator[](unsigned int index)
 
 const Point &Shape::operator[](unsigned int index) const
 {
-    if (vertices && index < numVertices)
+    if (index < numVertices)
     {
         return vertices[index];
     }
@@ -279,9 +236,7 @@ std::istream &operator>>(std::istream &in, Shape &shape)
                   << " vertices.\n";
     }
 
-    if (shape.vertices)
-        delete[] shape.vertices;
-    shape.vertices = new Point[shape.numVertices];
+    shape.vertices.assign(shape.numVertices, Point());
 
     for (unsigned int i = 0; i < shape.numVertices; ++i)
     {

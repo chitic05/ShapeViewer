@@ -108,6 +108,7 @@ cmake --build build --config Release
   - Demonstrates the diamond inheritance pattern
 
 - **ShapeManager** - Manages the collection of shapes
+  - Demonstrates HAS-A composition
   - Polymorphic storage via Shape* pointers
   - Filtering by type using `dynamic_cast` and `typeid`
 
@@ -120,11 +121,6 @@ cmake --build build --config Release
   - Array indexing with operator[]
 
 - **Matrix** - Matrix operations for transformations
-
-- **Segment** - Demonstrates HAS-A composition
-  - Contains two Point objects (not pointers)
-  - Shows initializer list usage: `Segment(Point s, Point e) : start(s), end(e)`
-  - Calculates distance between two points
 
 ### Shape Inheritance Hierarchy (Diamond Pattern)
 

@@ -5,28 +5,29 @@
 #include <list>
 #include <map>
 #include <algorithm>
+#include <cstddef>
 #include <stdexcept>
 
 class ShapeRepository
 {
 private:
-    static constexpr std::size_t kShapeBufferCapacity = 1024;
+    static constexpr std::size_t bufferCapacity = 1024;
 
     // FixedBuffer: capacitate fixa, acces O(1), cu exceptii la overflow/underflow
-    FixedBuffer<Shape*, kShapeBufferCapacity> bufferShapes;
+    FixedBuffer<Shape*, bufferCapacity> bufferShapes;
     // list: O(1) insert/erase with iterator, O(n) search
     std::list<Shape*> listShapes;
     // map: O(log n) find/insert/erase by id, keeps keys ordered
     std::map<unsigned int, Shape*> mapShapesById;
 
 public:
-    ShapeRepository() = default;
+    ShapeRepository();
     ~ShapeRepository() noexcept;
 
     void addShape(Shape* shape);
     Shape* findShapeById(unsigned int id) const;
     Shape* getShapeAt(unsigned int index) const;
-    const FixedBuffer<Shape*, kShapeBufferCapacity>& getAllShapes() const;
+    const FixedBuffer<Shape*, bufferCapacity>& getAllShapes() const;
     std::vector<Shape*> findShapesByColor(Color color) const;
     int countShapesWithAreaGreaterThan(float minArea) const;
     void removeShapeById(unsigned int id);

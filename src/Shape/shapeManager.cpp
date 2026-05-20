@@ -12,26 +12,31 @@
 ShapeManager::ShapeManager()
     : name("Default"), maxCapacity(1000)
 {
+    std::cout << "[ShapeManager] Constructed (Default, capacity=" << maxCapacity << ")\n";
 }
 
 ShapeManager::ShapeManager(const std::string& n, unsigned int capacity)
     : name(n), maxCapacity(capacity)
 {
+    std::cout << "[ShapeManager] Constructed (" << name << ", capacity=" << maxCapacity << ")\n";
 }
 
 ShapeManager::ShapeManager(const std::string& n)
     : name(n), maxCapacity(1000)
 {
+    std::cout << "[ShapeManager] Constructed (" << name << ", capacity=" << maxCapacity << ")\n";
 }
 
 ShapeManager::ShapeManager(unsigned int capacity)
     : name("Default"), maxCapacity(capacity)
 {
+    std::cout << "[ShapeManager] Constructed (Default, capacity=" << maxCapacity << ")\n";
 }
 
 ShapeManager::ShapeManager(const ShapeManager &other)
     : name(other.name), maxCapacity(other.maxCapacity)
 {
+    std::cout << "[ShapeManager] Copy constructed (" << name << ")\n";
     repository = other.repository.clone();
 }
 
@@ -49,6 +54,7 @@ ShapeManager &ShapeManager::operator=(const ShapeManager &other)
 
 ShapeManager::~ShapeManager() noexcept
 {
+    std::cout << "[ShapeManager] Destructed (" << name << ")\n";
     if (PageManager::getInstance().getSM() == this)
         PageManager::getInstance().getSM() = nullptr;
 }

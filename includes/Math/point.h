@@ -1,11 +1,12 @@
 #pragma once
 #include <iostream>
+#include <vector>
 
 class Point
 {
 private:
     //[0]=X [1]=Y
-    float *coord;
+    std::vector<float> coord;
 
     // Tine minte cate puncte au fost create in total
     static int contPct;

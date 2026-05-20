@@ -4,11 +4,7 @@
 
 Matrix::Matrix(const Point &p) : rows(3), cols(1)
 {
-    data = new float *[rows];
-    for (int i = 0; i < rows; ++i)
-    {
-        data[i] = new float[cols];
-    }
+    data.assign(rows, std::vector<float>(cols, 0.0f));
     data[0][0] = p[0];
     data[1][0] = p[1];
     data[2][0] = 1.0f;
@@ -16,87 +12,42 @@ Matrix::Matrix(const Point &p) : rows(3), cols(1)
 
 Matrix::Matrix() : rows(0), cols(0)
 {
-    data = nullptr;
+    data.clear();
 }
 
 Matrix::Matrix(unsigned int i, unsigned int j) : rows(i), cols(j)
 {
-    data = new float *[rows];
-    for (unsigned int k = 0; k < rows; ++k)
-    {
-        data[k] = new float[cols]{};
-    }
+    data.assign(rows, std::vector<float>(cols, 0.0f));
 }
 
 Matrix::Matrix(unsigned int i, unsigned int j, float val) : rows(i), cols(j)
 {
-    data = new float *[rows];
-    for (unsigned int k = 0; k < rows; ++k)
-    {
-        data[k] = new float[cols];
-        for (unsigned int l = 0; l < cols; l++)
-        {
-            data[k][l] = val;
-        }
-    }
+    data.assign(rows, std::vector<float>(cols, val));
 }
 
 Matrix::Matrix(unsigned int n) : rows(n), cols(n)
 {
-    data = new float *[rows];
+    data.assign(rows, std::vector<float>(cols, 0.0f));
     for (unsigned int k = 0; k < rows; ++k)
-    {
-        data[k] = new float[cols]{};
-        data[k][k] = 1;
-    }
+        data[k][k] = 1.0f;
 }
 
-Matrix::~Matrix() noexcept
-{
-    if (data)
-    {
-        for (int i = 0; i < rows; ++i)
-            if (data[i])
-                delete[] data[i];
-        delete[] data;
-    }
-}
+Matrix::~Matrix() noexcept = default;
 
 Matrix::Matrix(const Matrix &other)
 {
     rows = other.rows;
     cols = other.cols;
-    data = new float *[other.rows];
-    for (int i = 0; i < other.rows; ++i)
-    {
-        data[i] = new float[cols];
-        for (int j = 0; j < other.cols; ++j)
-            data[i][j] = other.data[i][j];
-    }
+    data = other.data;
 }
 
 Matrix &Matrix::operator=(const Matrix &other)
 {
     if (this == &other)
         return *this;
-
-    if (data)
-    {
-        for (int i = 0; i < rows; ++i)
-            if (data[i])
-                delete[] data[i];
-        delete[] data;
-    }
-
     rows = other.rows;
     cols = other.cols;
-    data = new float *[other.rows];
-    for (int i = 0; i < other.rows; ++i)
-    {
-        data[i] = new float[cols];
-        for (int j = 0; j < other.cols; ++j)
-            data[i][j] = other.data[i][j];
-    }
+    data = other.data;
     return *this;
 }
 
@@ -108,7 +59,7 @@ Matrix Matrix::operator+(const Matrix &other) const
     }
 
     Matrix result = Matrix(rows, cols);
-    if (data && other.data)
+    if (!data.empty() && !other.data.empty())
     {
         for (int i = 0; i < rows; ++i)
             for (int j = 0; j < cols; ++j)
@@ -125,7 +76,7 @@ Matrix Matrix::operator-(const Matrix &other) const
     }
 
     Matrix result = Matrix(rows, cols);
-    if (data && other.data)
+    if (!data.empty() && !other.data.empty())
     {
         for (int i = 0; i < rows; ++i)
             for (int j = 0; j < cols; ++j)
@@ -142,7 +93,7 @@ Matrix Matrix::operator*(const Matrix &other) const
     }
 
     Matrix result = Matrix(rows, other.cols);
-    if (data && other.data)
+    if (!data.empty() && !other.data.empty())
     {
         for (int i = 0; i < rows; ++i)
         {
@@ -173,7 +124,7 @@ Point Matrix::operator*(const Point &other) const
 
 const float *Matrix::operator[](unsigned int index) const
 {
-    if (data == nullptr)
+    if (data.empty())
     {
         throw std::runtime_error("Matrix is uninitialized");
     }
@@ -183,12 +134,12 @@ const float *Matrix::operator[](unsigned int index) const
         throw std::out_of_range("Matrix row index out of bounds");
     }
 
-    return data[index];
+    return data[index].data();
 }
 
 float *Matrix::operator[](unsigned int index)
 {
-    if (data == nullptr)
+    if (data.empty())
     {
         throw std::runtime_error("Matrix is uninitialized");
     }
@@ -198,7 +149,7 @@ float *Matrix::operator[](unsigned int index)
         throw std::out_of_range("Matrix row index out of bounds");
     }
 
-    return data[index];
+    return data[index].data();
 }
 
 std::ostream &operator<<(std::ostream &out, const Matrix &other)
@@ -214,24 +165,11 @@ std::ostream &operator<<(std::ostream &out, const Matrix &other)
 
 std::istream &operator>>(std::istream &in, Matrix &other)
 {
-    if (other.data)
-    {
-        for (int i = 0; i < other.rows; ++i)
-            if (other.data[i])
-                delete[] other.data[i];
-    }
-
-    if (other.data)
-        delete[] other.data;
-
     in >> other.rows >> other.cols;
-    other.data = new float *[other.rows];
+    other.data.assign(other.rows, std::vector<float>(other.cols, 0.0f));
     for (int i = 0; i < other.rows; ++i)
-    {
-        other.data[i] = new float[other.cols];
         for (int j = 0; j < other.cols; ++j)
             in >> other.data[i][j];
-    }
 
     return in;
 }

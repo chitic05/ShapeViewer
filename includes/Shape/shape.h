@@ -3,6 +3,7 @@
 #include "Math/point.h"
 #include "IObject.h"
 #include <string>
+#include <vector>
 
 struct SDL_Renderer;
 
@@ -16,12 +17,15 @@ enum class Color
 
 class Shape : public IObject
 {
+private:
+    bool debug = false;
+
 // PROTECTED: Clasele derivate (Rectangle, Diamond, Square) pot accesa
 protected:
     // VALID: Rectangle poate modifica vertices in constructor
     // INVALID: Codul extern NU poate accesa vertices direct
     // INVALID: Clasa Page (alta ierarhie) NU poate accesa vertices
-    Point *vertices;
+    std::vector<Point> vertices;
     
     // VALID: Diamond poate citi/modifica numVertices
     // INVALID: Extern code NU poate modifica numVertices

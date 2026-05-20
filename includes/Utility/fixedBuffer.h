@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "Math/point.h"
+#include "customExceptions.h"
 
 template <typename T, std::size_t N>
 class FixedBuffer
@@ -83,17 +84,16 @@ public:
         data.clear();
     }
 
-    void eraseIndex(std::size_t index)
+    void eraseID(unsigned int id)
     {
-        if (index >= data.size())
-            throw std::out_of_range("FixedBuffer index out of range");
-
-        std::size_t current = 0;
+        auto oldSize = data.size();
         auto newEnd = std::remove_if(data.begin(), data.end(),
-                                     [&current, index](const T &) {
-                                         return current++ == index;
+                                     [id](const T &value) {
+                                         return value && value->getId() == id;
                                      });
         data.erase(newEnd, data.end());
+        if (data.size() == oldSize)
+            throw ElementNotFoundException(id, "FixedBuffer id not found");
     }
 
     T *begin()

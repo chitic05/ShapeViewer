@@ -8,10 +8,8 @@ EquilateralTriangle::EquilateralTriangle(float s)
     : Shape(), side(s)
 {
     std::cout << "    [2] EquilateralTriangle::Constructor()" << std::endl;
-    if (this->vertices)
-        delete[] this->vertices;
-    this->vertices = new Point[3];
     this->numVertices = 3;
+    this->vertices.assign(3, Point());
 
     float height = std::sqrt(3.0f) * s / 2.0f;
 
@@ -30,10 +28,8 @@ EquilateralTriangle::EquilateralTriangle(const EquilateralTriangle &other)
     : Shape(other), side(other.side)
 {
     std::cout << "    [2] EquilateralTriangle::CopyConstructor()" << std::endl;
-    if (this->vertices)
-        delete[] this->vertices;
-    this->vertices = new Point[3];
     this->numVertices = 3;
+    this->vertices.assign(3, Point());
 
     for (unsigned int i = 0; i < 3; ++i)
         this->vertices[i] = other.vertices[i];
@@ -67,10 +63,8 @@ EquilateralTriangle &EquilateralTriangle::operator=(const EquilateralTriangle &o
         Shape::operator=(other);
         side = other.side;
 
-        if (this->vertices)
-            delete[] this->vertices;
-        this->vertices = new Point[3];
         this->numVertices = 3;
+        this->vertices.assign(3, Point());
 
         for (unsigned int i = 0; i < 3; ++i)
             this->vertices[i] = other.vertices[i];

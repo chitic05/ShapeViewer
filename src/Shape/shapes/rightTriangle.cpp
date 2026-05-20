@@ -7,10 +7,8 @@ RightTriangle::RightTriangle(float a, float b)
     : Shape(), legA(a), legB(b)
 {
     std::cout << "    [2] RightTriangle::Constructor()" << std::endl;
-    if (this->vertices)
-        delete[] this->vertices;
-    this->vertices = new Point[3];
     this->numVertices = 3;
+    this->vertices.assign(3, Point());
 
     Point p0(0.0f, 0.0f);
     Point p1(a, 0.0f);
@@ -30,10 +28,8 @@ RightTriangle::RightTriangle(const RightTriangle &other)
     : Shape(other), legA(other.legA), legB(other.legB)
 {
     std::cout << "    [2] RightTriangle::CopyConstructor()" << std::endl;
-    if (this->vertices)
-        delete[] this->vertices;
-    this->vertices = new Point[3];
     this->numVertices = 3;
+    this->vertices.assign(3, Point());
 
     for (unsigned int i = 0; i < 3; ++i)
         this->vertices[i] = other.vertices[i];
@@ -68,10 +64,8 @@ RightTriangle &RightTriangle::operator=(const RightTriangle &other)
         legA = other.legA;
         legB = other.legB;
 
-        if (this->vertices)
-            delete[] this->vertices;
-        this->vertices = new Point[3];
         this->numVertices = 3;
+        this->vertices.assign(3, Point());
 
         for (unsigned int i = 0; i < 3; ++i)
             this->vertices[i] = other.vertices[i];

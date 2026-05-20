@@ -4,8 +4,14 @@
 #include <iostream>
 #include <sstream>
 
+ShapeRepository::ShapeRepository()
+{
+    std::cout << "[ShapeRepository] Constructed\n";
+}
+
 ShapeRepository::~ShapeRepository() noexcept
 {
+    std::cout << "[ShapeRepository] Destructed\n";
     for (auto shape : bufferShapes) {
         delete shape;
     }
@@ -53,7 +59,7 @@ Shape* ShapeRepository::getShapeAt(unsigned int index) const
 }
 
 // READ - Returneaza referinta la vector (pentru iterare)
-const FixedBuffer<Shape*, ShapeRepository::kShapeBufferCapacity>& ShapeRepository::getAllShapes() const
+const FixedBuffer<Shape*, ShapeRepository::bufferCapacity>& ShapeRepository::getAllShapes() const
 {
     return bufferShapes;
 }
@@ -90,10 +96,10 @@ void ShapeRepository::removeShapeById(unsigned int id)
     const std::pair<const unsigned int, Shape*>& entry = *it;
     auto [foundId, shapeToRemove] = entry;
     
-    int index = findIndex(bufferShapes, shapeToRemove);
-    if (index >= 0)
-    {
-        bufferShapes.eraseIndex(static_cast<std::size_t>(index));
+    try {
+        bufferShapes.eraseID(id);
+    } catch (const ElementNotFoundException& e) {
+        std::cout << "[ShapeRepository] " << e.what() << " (ID=" << id << ")\n";
     }
     
     // Remove_if pentru list
@@ -123,7 +129,7 @@ void ShapeRepository::printAllShapes() const
                                 << ", Perimeter=" << shape->getPerimeter() << "\n";
                   });
 
-    FixedBuffer<float, kShapeBufferCapacity> perimeters;
+    FixedBuffer<float, bufferCapacity> perimeters;
     for (const auto& shape : bufferShapes)
         perimeters.push(shape->getPerimeter());
     auto perimetersAsDouble = perimeters.convert<double>();

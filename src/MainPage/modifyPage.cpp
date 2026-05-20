@@ -9,6 +9,7 @@
 #include "Shape/shapes/equilateralTriangle.h"
 #include "Factory/abstractFactory.h"
 #include "Shape/shapeManager.h"
+#include "customExceptions.h"
 #include "terminal.hpp"
 #include <string>
 #include <typeinfo>
@@ -241,9 +242,16 @@ void ModifyPage::Load()
     {
         selectedShape = sm->getRepository().findShapeById(shapeId);
     }
-    catch (...)
+    catch (const ElementNotFoundException &e)
     {
-        std::cerr << "Shape with ID " << shapeId << " was not found!\n";
+        std::cerr << "Shape not found: " << e.getDetails() << "\n";
+        std::getline(std::cin, line);
+        PageManager::getInstance().changePage(this->previous);
+        return;
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Error selecting shape: " << e.what() << "\n";
         std::getline(std::cin, line);
         PageManager::getInstance().changePage(this->previous);
         return;
@@ -286,9 +294,9 @@ void ModifyPage::Load()
             *selectedShape = transformMatrix * *selectedShape;
             std::cout << "Shape scaled successfully!\n";
         }
-        catch (...)
+        catch (const std::exception &e)
         {
-            std::cerr << "Invalid scaling factor!\n";
+            std::cerr << "Invalid scaling factor: " << e.what() << "\n";
         }
     }
     else if (option == 2)
@@ -302,9 +310,9 @@ void ModifyPage::Load()
             *selectedShape = transformMatrix * *selectedShape;
             std::cout << "Shape rotated successfully!\n";
         }
-        catch (...)
+        catch (const std::exception &e)
         {
-            std::cerr << "Invalid angle!\n";
+            std::cerr << "Invalid angle: " << e.what() << "\n";
         }
     }
     else if (option == 3)
@@ -321,9 +329,9 @@ void ModifyPage::Load()
             *selectedShape = transformMatrix * *selectedShape;
             std::cout << "Shape translated successfully!\n";
         }
-        catch (...)
+        catch (const std::exception &e)
         {
-            std::cerr << "Invalid translation values!\n";
+            std::cerr << "Invalid translation values: " << e.what() << "\n";
         }
     }
     else

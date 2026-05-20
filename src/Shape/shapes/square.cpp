@@ -8,10 +8,8 @@ Square::Square(float side)
     : Rectangle(side, side), Diamond(side * std::sqrt(2.0f), side * std::sqrt(2.0f))
 {
     std::cout << "      [4] Square::Constructor()" << std::endl;
-    if (this->vertices)
-        delete[] this->vertices;
-    this->vertices = new Point[4];
     this->numVertices = 4;
+    this->vertices.assign(4, Point());
     
     float halfSide = side / 2.0f;
     this->vertices[0] = Point(-halfSide, -halfSide);
@@ -26,10 +24,8 @@ Square::Square(const Square &other)
     : Shape(other), Rectangle(other), Diamond(other)
 {
     std::cout << "      [4] Square::CopyConstructor()" << std::endl;
-    if (this->vertices)
-        delete[] this->vertices;
-    this->vertices = new Point[4];
     this->numVertices = 4;
+    this->vertices.assign(4, Point());
     
     float halfSide = Rectangle::width / 2.0f;
     this->vertices[0] = Point(-halfSide, -halfSide);
@@ -66,11 +62,9 @@ Square &Square::operator=(const Square &other)
         Shape::operator=(other);
         Rectangle::operator=(other);
         Diamond::operator=(other);
-        
-        if (this->vertices)
-            delete[] this->vertices;
-        this->vertices = new Point[4];
+
         this->numVertices = 4;
+        this->vertices.assign(4, Point());
         
         float halfSide = Rectangle::width / 2.0f;
         this->vertices[0] = Point(-halfSide, -halfSide);

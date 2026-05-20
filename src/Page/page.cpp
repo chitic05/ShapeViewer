@@ -2,14 +2,11 @@
 #include "Page/pageManager.h"
 #include <iostream>
 
-Page::Page(){
-    next = new Page*[1000];
+Page::Page() : next(1000, nullptr)
+{
 }
 
-Page::~Page() noexcept
-{
-    delete[] next;
-}
+Page::~Page() noexcept = default;
 
 const std::string& Page::getName()
 {

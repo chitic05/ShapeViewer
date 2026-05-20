@@ -8,10 +8,8 @@ Diamond::Diamond(float d1, float d2)
     : Shape(), diagonal1(d1), diagonal2(d2)
 {
     std::cout << "    [2] Diamond::Constructor()" << std::endl;
-    if (this->vertices)
-        delete[] this->vertices;
-    this->vertices = new Point[4];
     this->numVertices = 4;
+    this->vertices.assign(4, Point());
     
     this->vertices[0] = Point(0, d1 / 2.0f);
     this->vertices[1] = Point(d2 / 2.0f, 0);
@@ -25,10 +23,8 @@ Diamond::Diamond(const Diamond &other)
     : Shape(other), diagonal1(other.diagonal1), diagonal2(other.diagonal2)
 {
     std::cout << "    [2] Diamond::CopyConstructor()" << std::endl;
-    if (this->vertices)
-        delete[] this->vertices;
-    this->vertices = new Point[4];
     this->numVertices = 4;
+    this->vertices.assign(4, Point());
     
     this->vertices[0] = Point(0, diagonal1 / 2.0f);
     this->vertices[1] = Point(diagonal2 / 2.0f, 0);
@@ -64,11 +60,9 @@ Diamond &Diamond::operator=(const Diamond &other)
         Shape::operator=(other);
         diagonal1 = other.diagonal1;
         diagonal2 = other.diagonal2;
-        
-        if (this->vertices)
-            delete[] this->vertices;
-        this->vertices = new Point[4];
+
         this->numVertices = 4;
+        this->vertices.assign(4, Point());
         
         this->vertices[0] = Point(0, diagonal1 / 2.0f);
         this->vertices[1] = Point(diagonal2 / 2.0f, 0);

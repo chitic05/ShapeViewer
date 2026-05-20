@@ -35,7 +35,7 @@ protected:
 
     Page *previous;
 
-    Page** next;
+    std::vector<Page*> next;
 
     std::string text;
 };

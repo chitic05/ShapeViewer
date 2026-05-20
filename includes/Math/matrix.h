@@ -1,12 +1,13 @@
 #pragma once
 #include "Math/point.h"
 #include <iostream>
+#include <vector>
 
 class Matrix
 {
 private:
     // Matricea de date [rows][cols]
-    float **data;
+    std::vector<std::vector<float>> data;
 
     // Dimensiunile matricei
     unsigned int rows, cols;
