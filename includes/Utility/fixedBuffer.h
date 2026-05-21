@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <initializer_list>
 #include <stdexcept>
 #include <sstream>
 #include <string>
@@ -20,6 +21,14 @@ public:
     FixedBuffer()
     {
         data.reserve(N);
+    }
+
+    FixedBuffer(std::initializer_list<T> init)
+    {
+        if (init.size() > N)
+            throw std::overflow_error("FixedBuffer overflow: capacity exceeded");
+        data.reserve(N);
+        data.insert(data.end(), init.begin(), init.end());
     }
 
     ~FixedBuffer() noexcept = default;
